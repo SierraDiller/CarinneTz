@@ -28,7 +28,6 @@ h1{font-size:2rem;line-height:1.2} h2{text-transform:uppercase;letter-spacing:.0
 .stack{display:flex;flex-direction:column;gap:18px}
 .row{display:flex;gap:12px;align-items:center}
 .row.name-card-row{justify-content:space-between;gap:32px}
-
 .bold-link {color: #141417; text-decoration: none; font-weight: normal;
 }.full{grid-column:1/-1}
 .ph.circle{height:120px;width:120px;border-radius:24px}
@@ -55,7 +54,6 @@ h1{font-size:2rem;line-height:1.2} h2{text-transform:uppercase;letter-spacing:.0
 a:hover .work-item{transform:translateY(-2px);box-shadow:var(--sh-md);cursor:pointer}
 .projects-card{perspective:1200px}
 .proj-item.work-item{transform-style:preserve-3d;transform-origin:center bottom}
-
 /* --- Modal Styles --- */
 .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(2px);z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s}
 .modal.open{opacity:1;pointer-events:auto}
@@ -69,11 +67,15 @@ a:hover .work-item{transform:translateY(-2px);box-shadow:var(--sh-md);cursor:poi
 .modal:not(#seo-modal) .modal__body .btn{justify-self:center;margin:4px 0 0}
 #seo-modal .modal__body{overflow-y:auto;max-height:100%}
 @media (max-width:1024px){
-  .wrap,.top-grid,.content-grid{display:flex;flex-direction:column;gap:15px}
-  .col{display:contents}
-  .card{width:100%;min-height:160px;margin:0 0 0 0;}
-  .top-name-card{order:0}.top-profile{order:1}.top-skills{order:2}.work-experience-card{order:3}.projects-card{order:4}.top-edu{order:5}.certification-card{order:6}.contact-card{order:7}.reference-card{order:8}.social-card{order:9}.hobby-card{order:10}
+  .wrap{display:flex;flex-direction:column;gap:15px}
+  .top-grid,.content-grid,.col{display:contents}
+  .card{width:100%;min-height:160px;margin:0}
+  .top-name-card{order:0}.top-profile{order:1}.top-skills{order:2}
+  .work-experience-card{order:3}.top-edu{order:5}.projects-card{order:4}
+  .certification-card{order:6}.contact-card{order:7}.reference-card{order:8}
+  .social-card{order:9}.hobby-card{order:10}
 }
+/* Desktop (min-width:1025px): Set left column card order: contact, certification, references, more of me, hobby */
 @media (min-width:1025px){
   .content-grid{grid-template-columns:300px minmax(0,1.9fr);column-gap:20px}
   .top-grid{grid-template-columns:1fr 1.4fr 1.6fr;gap:8px 16px}
@@ -108,6 +110,12 @@ a:hover .work-item{transform:translateY(-2px);box-shadow:var(--sh-md);cursor:poi
   .top-grid > .card.top-skills {
     margin-bottom: 6px;
   }
+  /* Desktop left column card order: contact, certification, references, more of me, hobby */
+  .content-grid > .col > .contact-card { order: 1; }
+  .content-grid > .col > .certification-card { order: 2; }
+  .content-grid > .col > .reference-card { order: 3; }
+  .content-grid > .col > .social-card { order: 4; }
+  .content-grid > .col > .hobby-card { order: 5; }
 }
 @media (max-width:700px){
   .row.name-card-row{flex-direction:column;align-items:center;text-align:center;gap:12px}
@@ -181,14 +189,12 @@ body:has(.modal.open){overflow:hidden}
 #buildher-modal .modal__body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.28)}
 #buildher-modal .modal__body iframe{display:block;width:100%;height:75vh;min-height:480px;border-radius:0}
 #buildher-modal .modal__body>div[style*="justify-content:center"]{margin:6px 0 6px!important}
-
 @media (min-width:1025px){
   .top-edu,.top-profile,.top-skills{
     height:260px;display:flex;flex-direction:column;justify-content:flex-start;
     padding:24px;box-sizing:border-box
   }
   .top-edu h2,.top-profile h2,.top-skills h2{margin:0 0 12px}
-
   .top-skills>div{
     display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-content:start
   }
@@ -196,10 +202,6 @@ body:has(.modal.open){overflow:hidden}
     margin:0;padding:.32rem .6rem;font-size:.86rem;text-align:center;white-space:nowrap
   }
 }
-
-
-
-
 </style>
 </head>
 <body>
@@ -417,3 +419,4 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')$$('.modal.open').fo
 </script>
 </body>
 </html>
+
