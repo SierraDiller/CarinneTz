@@ -1,60 +1,879 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carrine Tzur Portfolio</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Carinne Tzurdecker — Automation Engineer</title>
+
   <style>
+    /* =========================
+       CSS VARIABLES (THEME)
+    ========================== */
+    :root {
+      --bg: #FFF2E0;              /* Main background color */
+      --card: #ffffff;            /* Card background */
+      --ink: #141417;             /* Main text color */
+      --muted: #6b6b6b;           /* Muted/secondary text */
+      --line: #ece6d6;            /* Border/line color */
+      --accent: #C0C9EE;          /* Accent color (tags, highlights) */
+      --accent-ink: #0f1220;      /* Accent text color */
+      --radius: 18px;             /* Border radius for cards */
+      --grid-line: #E7E1CF;       /* Grid background lines */
+      --shadow-sm: 0 1px 0 rgba(10, 10, 10, .04);   /* Small shadow */
+      --shadow-md: 0 8px 20px rgba(20, 20, 20, .06);/* Medium shadow */
+      --shadow-lg: 0 24px 48px rgba(20, 20, 20, .10);/* Large shadow */
+    }
+
+    * {
+      box-sizing: border-box /* Use border-box for all elements */
+    }
+
+    html,
     body {
-      font-family: Arial, sans-serif;
-      background: #fafafa;
-      color: #222;
+      height: 100% /* Full height for html and body */
+    }
+
+    body {
       margin: 0;
-      padding: 0;
+      background: var(--bg);
+      /* Subtle grid background using two linear gradients */
+      background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      color: var(--ink);
+      font: 16px/1.55 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* Main wrapper for the page content */
+    .wrap {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: grid;
+      gap: 28px;
+    }
+
+    /* Top and content grid layouts */
+    .top-grid,
+    .content-grid {
+      display: grid;
+      gap: 28px
+    }
+
+    /* Desktop grid layouts */
+    @media (min-width:1025px) {
+      .content-grid {
+        grid-template-columns: 300px minmax(0, 1.9fr); /* Sidebar + main */
+        column-gap: 20px
+      }
+
+      .top-grid {
+        grid-template-columns: 1fr 1.4fr 1.6fr; /* 3 columns for top */
+        align-items: stretch;
+        column-gap: 12px;
+        row-gap: 32px
+      }
+      /* Make all top-grid cards (except .top-name-card) the same height */
+      .top-grid > .card:not(.top-name-card) {
+        height: 90%;
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+      /* Ensure .top-skills fills the height */
+      .top-skills {
+        height: 100%;
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+      .top-skills > div {
+        flex: 1 1 auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        align-content: flex-start;
+      }
+    }
+
+    /* Card component styling */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px 22px 22px 22px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 18px;
+    }
+
+    .card:last-child {
+      margin-bottom: 0;
+    }
+
+
+    /* Headings */
+    h1,
+    h2,
+    h3 {
+      margin: 0 0 .5rem
+    }
+
+    h1 {
+      font-size: 2rem;
+      line-height: 1.2
+    }
+
+    h2 {
+      font-size: 1.05rem;
+      letter-spacing: .02em;
+      text-transform: uppercase
+    }
+
+    .muted {
+      color: var(--muted) /* Muted text color */
+    }
+
+    /* Stack utility for vertical spacing */
+    .stack {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
+      gap: 18px; /* Increased gap for more vertical space between items */
     }
-    .container {
-      margin-top: 80px;
-      background: #fff;
-      padding: 32px 24px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-      max-width: 400px;
-      width: 100%;
+
+    /* Row utility for horizontal alignment */
+    .row {
+      display: flex;
+      gap: 12px;
+      align-items: center
+    }
+
+    /* Tag badge (e.g. job title) */
+    .tag {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-ink);
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .85rem;
+    }
+
+    /* Skill and pill badges */
+    .skill-chip,
+    .pill {
+      display: inline-block;
+      margin: 6px 6px 0 0;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      background: #f6f3e9;
+      border: 1px solid var(--line);
+      font-size: .9rem;
       text-align: center;
+      vertical-align: middle;
     }
-    h1 {
-      margin-bottom: 8px;
-      font-size: 2.2em;
-      letter-spacing: 1px;
+
+    .pill {
+      background: #efe9d6;
+      font-size: .85rem
     }
-    p {
-      margin: 12px 0 24px 0;
-      font-size: 1.1em;
+
+    /* Special row for name card */
+    .row.name-card-row {
+      justify-content: space-between;
+      gap: 32px
     }
-    .contact {
-      font-size: 1em;
-      color: #555;
+
+    /* Placeholder circle (left of name) */
+    .ph.circle {
+      height: 120px;
+      width: 120px;
+      border-radius: 24px
     }
-    a {
-      color: #0077cc;
+
+    /* Profile image circle (right of name) */
+    .profile-image-circle {
+      height: 160px;
+      width: 160px;
+      border-radius: 50%;
+      background: #e9e4d3;
+      border: 1px solid #d8d0b8;
+    }
+
+    /* One-liner under name */
+    .name-oneliner {
+      margin-top: 1.1rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 500;
+      letter-spacing: .01em
+    }
+
+    /* Work and project item cards */
+    .work-item,
+    .proj-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 12px;
+      background: #fffdfa;
+    }
+
+    .work-item h3,
+    .proj-item h3 {
+      margin: 0;
+      font-size: 1rem
+    }
+
+    /* Time badge for jobs/projects */
+    .time {
+      font-size: .85rem;
+      font-weight: 400;
+      background: var(--accent);
+      padding: .2rem .5rem;
+      border-radius: 8px;
+      align-self: start;
+      border: 1px solid #C0C9EE
+    }
+
+    /* Utility grid layouts */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px
+    }
+
+    /* Contact box styling */
+    .contact-box {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fffdfa
+    }
+
+    /* Left column helpers (desktop only) */
+    @media (min-width:1025px) {
+      .left-col-card .grid-4 {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+        gap: 10px 12px
+      }
+
+      .left-col-card .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 12px
+      }
+
+      .left-col-card .contact-box {
+        padding: 10px 12px;
+        overflow-wrap: anywhere
+      }
+    }
+
+    /* Social button grid */
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px
+    }
+
+    /* Button styling */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .65rem .95rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fffdfa;
+      color: var(--ink);
+      font-weight: 600;
       text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s, box-shadow .2s;
     }
-    a:hover {
-      text-decoration: underline;
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md)
     }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px
+    }
+
+    /* Education compact layout */
+    .top-edu .edu-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .top-edu .edu-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap
+    }
+
+    .top-edu .degree {
+      font-weight: 600;
+      line-height: 1.4
+    }
+
+    .top-edu .year {
+      background: #f3efdf;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .35rem .75rem;
+      font-weight: 700;
+      font-size: .85rem
+    }
+
+    /* Top name card accent (desktop only) */
+    @media (min-width:1025px) {
+      .top-name-card {
+        grid-column: 1/4;
+        width: 100%;
+        border: 1px solid #dfe4fb;
+        box-shadow: 0 12px 30px rgba(192, 201, 238, .35)
+      }
+    }
+
+    /* ================================
+       MODAL STYLES (Reusable)
+    ================================ */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, .55);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+
+    .modal.open {
+      display: flex;
+      opacity: 1
+    }
+
+    .modal__panel {
+      position: relative;
+      background: #fff;
+      border-radius: 20px;
+      width: 90vw;
+      height: 90vh;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(12px) scale(.98);
+      opacity: 0;
+      transition: transform .28s ease, opacity .28s ease;
+    }
+
+    .modal.open .modal__panel {
+      transform: translateY(0) scale(1);
+      opacity: 1
+    }
+
+    .modal__close {
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      background: #fff;
+      border: 1px solid #e7e7e7;
+      font-size: 1.3rem;
+      color: #333;
+      cursor: pointer;
+      line-height: 1;
+      border-radius: 999px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .modal__body {
+      flex: 1;
+      overflow: auto;
+      padding: 0;
+      border-radius: 0 0 20px 20px
+    }
+
+    .modal__body img,
+    .modal__body iframe {
+      display: block;
+      width: 100%;
+      height: auto
+    }
+
+    /* Remove transitions for users who prefer reduced motion */
+    @media (prefers-reduced-motion:reduce) {
+
+      .btn,
+      .modal,
+      .modal__panel {
+        transition: none
+      }
+    }
+
+    /* ================================
+       MOBILE/TABLET STACKING
+    ================================ */
+    @media (max-width:1024px) {
+
+      .wrap,
+      .top-grid,
+      .content-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 24px
+      }
+
+      .col {
+        display: contents
+      }
+
+      .card {
+        width: 100%;
+        min-height: 160px
+      }
+
+      /* Order of cards for mobile layout */
+      .top-name-card { order: 0 }
+      .top-profile { order: 1 }
+      .top-skills { order: 2 }
+      .work-experience-card { order: 3 }
+      .projects-card { order: 4 }
+      .top-edu { order: 5 }
+      .certification-card { order: 6 }
+      .contact-card { order: 7 }
+      .reference-card { order: 8 }
+      .social-card { order: 9 }
+      .hobby-card { order: 10 }
+    }
+
+    /* Footer styling */
+    footer {
+      max-width: 1200px;
+      margin: 10px auto 20px;
+      padding: 0 20px 30px 20px;
+      color: var(--muted);
+      font-size: .9rem
+    }
+    
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>Carrine Tzur</h1>
-    <p>Welcome to my portfolio website.<br/>I'm Carrine, and this is a simple space to share a bit about myself and how to reach me.</p>
-    <div class="contact">
-      <p>Email: <a href="mailto:carrine.tzur@email.com">carrine.tzur@email.com</a></p>
+  <main class="wrap">
+    <!-- =========================
+         TOP STRIP (Header Section)
+    ========================== -->
+    <section class="top-grid">
+      <!-- Name Card (spans top) -->
+      <section class="card top-name-card">
+        <div class="row name-card-row">
+          <div class="row" style="flex:1 1 0;min-width:0;">
+            <div class="ph circle" style="flex:0 0 1px;border:none;"></div> <!-- Placeholder for profile image -->
+            <div>
+              <span class="tag">Automation Engineer</span> <!-- Job title tag -->
+              <h1 style="margin-top:.6rem;">Hello, I’m<br />Carinne Tzurdecker</h1> <!-- Name -->
+              <div class="name-oneliner">
+                Building automation that quietly powers teams—clean UX up front, durable ops in the back.
+              </div>
+            </div>
+          </div>
+          <div class="profile-image-circle"></div> <!-- Profile image (right) -->
+        </div>
+      </section>
+
+      <!-- Education Card -->
+      <section class="card top-edu">
+        <h2>Education</h2>
+        <div class="edu-compact">
+          <div class="edu-line">
+            <span class="year">2022–2025</span>
+            <strong class="degree">B.S. Computer Science — Concentration in A.I.</strong>
+          </div>
+          <div class="school">Kennesaw State University</div>
+        </div>
+      </section>
+
+      <!-- About My Work Card -->
+      <section class="card top-profile">
+        <h2>About My Work</h2>
+        <p class="muted">
+          Automation-focused engineer passionate about building seamless systems that keep companies running smoothly.
+          Robust automation is behind the scenes. Experienced with Make, n8n, and advanced JSON workflows; driven by measurable results and effortless, hands-off solutions.
+        </p>
+      </section>
+
+      <!-- Skills Card -->
+      <section class="card top-skills">
+        <h2>Skills</h2>
+        <div>
+          <!-- List of skill chips -->
+          <span class="skill-chip">HTML</span>
+          <span class="skill-chip">CSS</span>
+          <span class="skill-chip">JS</span>
+
+          <span class="skill-chip">React</span>
+          <span class="skill-chip">Node</span>
+          <span class="skill-chip">Python</span>
+          <span class="skill-chip">Java</span>
+          <span class="skill-chip">JSON</span>
+          <span class="skill-chip">API Integration</span>
+          <span class="skill-chip">Make / n8n</span>
+          <span class="skill-chip">Workflow Design</span>
+          <span class="skill-chip">Web Design</span>
+          <span class="skill-chip">GitHub</span>
+        </div>
+      </section>
+    </section>
+
+    <!-- =========================
+         MAIN CONTENT GRID
+    ========================== -->
+    <section class="content-grid">
+      <!-- ===== LEFT COLUMN ===== -->
+      <aside class="col">
+        <!-- Contact Card -->
+        <section class="card left-col-card contact-card">
+          <h2>Contact</h2>
+          <div class="stack">
+            <div class="contact-box">+1 (470) 365-9019</div> <!-- Phone number -->
+            <div class="contact-box">carinne@example.com</div> <!-- Email -->
+            <div class="muted" style="text-align:center;">Currently Based in Atlanta, GA</div>
+          </div>
+        </section>
+
+        <!-- Certification Card -->
+        <section class="card left-col-card certification-card">
+          <h2>Certification</h2>
+          <div class="stack">
+            <!-- Make.com Certification -->
+            <div class="row">
+              <span class="pill">2025</span>
+              <div>
+                <strong>Make.com</strong>
+                <div class="k muted">Automation Engineering</div>
+              </div>
+            </div>
+            <!-- SheCodes Certification -->
+            <div class="row">
+              <span class="pill">2022</span>
+              <div>
+                <strong>SheCodes</strong>
+                <div class="k muted">Frontend Basics</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Hobby & Interest Card -->
+        <section class="card left-col-card hobby-card">
+          <h2>Hobby & Interest</h2>
+          <div class="grid-4 hobby-grid">
+            <!-- List of hobbies -->
+            <div class="contact-box hobby-chip" style="text-align:center;">Lift</div>
+            <div class="contact-box hobby-chip" style="text-align:center;">Snowboard</div>
+            <div class="contact-box hobby-chip" style="text-align:center;">Travel</div>
+            <div class="contact-box hobby-chip" style="text-align:center;">Guitar</div>
+          </div>
+          <h2 style="margin-top:1.5em;">Dislikes</h2>
+          <div class="grid-4 hobby-grid">
+            <!-- List of dislikes -->
+            <div class="contact-box hobby-chip" style="text-align:center;">Leg Day</div>
+            <div class="contact-box hobby-chip" style="text-align:center;">Olives</div>
+          </div>
+        </section>
+
+        <!-- References Card -->
+        <section class="card left-col-card reference-card">
+          <h2>References</h2>
+          <div class="grid-2" style="grid-template-columns:1fr;gap:12px;">
+            <!-- Reference 1 -->
+            <div class="contact-box ref-box">
+              <strong>Julian Trumper</strong><br />Rankey Founder
+              <div class="k">
+                <a href="mailto:nabeel@example.com"
+                  style="color:#b0b0b0; text-decoration:none;"
+                  onmousedown="this.style.color='#b0b0b0'"
+                  onmouseup="this.style.color='#b0b0b0'"
+                  onfocus="this.style.color='#b0b0b0'"
+                  onblur="this.style.color='#b0b0b0'">nabeel@example.com</a>
+              </div>
+            </div>
+            <!-- Reference 2 -->
+            <div class="contact-box ref-box">
+              <strong>Peter Thompkins</strong><br />Current Employer: Hospitality
+              <div class="k">
+                <a href="mailto:hhanzala@example.com"
+                  style="color:#b0b0b0; text-decoration:none;"
+                  onmousedown="this.style.color='#b0b0b0'"
+                  onmouseup="this.style.color='#b0b0b0'"
+                  onfocus="this.style.color='#b0b0b0'"
+                  onblur="this.style.color='#b0b0b0'">hhanzala@example.com</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Social Links Card -->
+        <section class="card left-col-card social-card">
+          <h2>More of Me</h2>
+          <div class="social-grid">
+            <!-- Social buttons -->
+            <a class="btn" href="https://linkedin.com/in/carinne" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="btn" href="https://github.com/carinne" target="_blank" rel="noopener">GitHub</a>
+            <a class="btn" href="https://twitter.com/carinne" target="_blank" rel="noopener">Twitter</a>
+            <a class="btn" href="https://instagram.com/carinne" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </section>
+      </aside>
+
+      <!-- ===== RIGHT COLUMN ===== -->
+      <section class="col right-col">
+        <!-- Work Experience Card -->
+        <section class="card work-experience-card">
+          <h2>Work Experience</h2>
+          <div class="stack">
+            <!-- Job 1: Rankey -->
+            <div class="work-item">
+              <h3>Automation Engineer — Rankey</h3>
+              <div class="time">May – Present</div>
+              <div class="muted" style="grid-column:1 / -1">
+                Developed an AI-powered automation tool that manages the entire content publishing workflow for multiple WordPress sites—including planning, writing, image generation, and posting. Implemented robust error handling with automatic retries, detailed logging, and customizable settings for each client.
+              </div>
+              <div style="grid-column:1 / -1;margin-top:8px;">
+                <!-- Skills for this job -->
+                <span class="skill-chip">Make</span>
+                <span class="skill-chip">API Integration</span>
+                <span class="skill-chip">JSON</span>
+                <span class="skill-chip">Workflow Design</span>
+                <span class="skill-chip">Automation Design</span>
+                <span class="skill-chip">Process Automation</span>
+                <span class="skill-chip">Prompt Engineering</span>
+                <span class="skill-chip">Technical Presentation</span>
+              </div>
+            </div>
+
+            <!-- Job 2: BuildHer -->
+            <div class="work-item">
+              <h3>Startup Founder — BuildHer</h3>
+              <div class="time">July – Present</div>
+              <div class="muted" style="grid-column:1 / -1">
+                Build and launch websites for strength sports coaches and teams, providing coaches a platform for client onboarding, training plan delivery, and case studies.
+              </div>
+              <div style="grid-column:1 / -1;margin-top:8px;">
+                <!-- Skills for this job -->
+                <span class="skill-chip">Sales</span>
+                <span class="skill-chip">Web Design</span>
+                <span class="skill-chip">HTML</span>
+                <span class="skill-chip">JavaScript</span>
+                <span class="skill-chip">CSS</span>
+                <span class="skill-chip">JSON</span>
+                <span class="skill-chip">GitHub</span>
+                <span class="skill-chip">Client Lifecycle Management</span>
+              </div>
+            </div>
+
+            <!-- Job 3: Poozle -->
+            <div class="work-item">
+              <h3>Frontend Intern — Poozle</h3>
+              <div class="time">June 2024 – Jan 2025</div>
+              <div class="muted" style="grid-column:1 / -1">
+                Built the sign-in page, interactive job cards, and integrated Google’s Location API for city auto-fill in Poozle’s onboarding flow.
+              </div>
+              <div style="grid-column:1 / -1;margin-top:8px;">
+                <!-- Skills for this job -->
+                <span class="skill-chip">React Native</span>
+                <span class="skill-chip">Expo</span>
+                <span class="skill-chip">HTML</span>
+                <span class="skill-chip">CSS</span>
+                <span class="skill-chip">JavaScript</span>
+                <span class="skill-chip">Node.js</span>
+                <span class="skill-chip">GitHub</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Projects Card -->
+        <section class="card projects-card">
+          <h2>Projects</h2>
+          <div class="stack">
+            <!-- Project 1: SEO Agent -->
+            <article class="proj-item">
+              <h3>SEO Content Agent</h3>
+              <div class="time">2025</div>
+              <div class="muted" style="grid-column:1 / -1">
+                End-to-end agent for weekly publishing across a WordPress network: keyword planning, draft generation, image creation, post & schedule, and logging.
+              </div>
+              <div class="meta" style="grid-column:1 / -1">
+                <!-- Button to open modal for this project -->
+                <a class="btn" href="#" data-modal="#seo-modal">Click to view</a>
+              </div>
+            </article>
+
+            <!-- Project 2: BuildHer Client Site -->
+            <article class="proj-item">
+              <h3>BuildHer - Client Site</h3>
+              <div class="time">2025</div>
+              <div class="muted" style="grid-column:1 / -1">
+                Custom website for a powerlifting coach with programs, results, onboarding, progress tracking, and interactive scheduling.
+              </div>
+              <div class="meta" style="grid-column:1 / -1">
+                <!-- Button to open modal for this project -->
+                <a class="btn" href="#" data-modal="#buildher-modal">Click to view</a>
+              </div>
+            </article>
+
+            <!-- Project 3: KSU Club Barbell Site -->
+            <article class="proj-item">
+              <h3>Kennesaw State University Club Barbell Official Site</h3>
+              <div class="time">2023</div>
+              <div class="muted" style="grid-column:1 / -1">
+                Website for Kennesaw State University Club Barbell: join the club, merch, mission & team, and events.
+              </div>
+              <div class="meta" style="grid-column:1 / -1">
+                <!-- Button to open modal for this project -->
+                <a class="btn" href="#" data-modal="#ksu-modal">Click to view</a>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <!-- =========================
+       MODALS FOR PROJECTS
+  ========================== -->
+
+  <!-- Modal for SEO Content Agent project -->
+  <div class="modal" id="seo-modal" aria-hidden="true">
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="SEO Content Agent">
+      <button class="modal__close" data-close>&times;</button>
+      <div class="modal__body">
+        <!-- Image/diagram for SEO Content Agent -->
+        <img src="Carinne (3).svg" alt="SEO Content Agent Diagram">
+      </div>
     </div>
   </div>
+
+  <!-- Modal for BuildHer Client Site project -->
+  <div class="modal" id="buildher-modal" aria-hidden="true">
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="BuildHer – Client Site">
+      <button class="modal__close" data-close>&times;</button>
+      <div class="modal__body" style="padding:2rem;color:#222;">
+        <h2 style="margin:0 0 1rem 0;">BuildHer - Client Site</h2>
+        <!-- Embedded iframe of the project site -->
+        <iframe src="https://tony-hinson.vercel.app/"
+          style="width:100%;height:65vh;border:1px solid #ddd;border-radius:12px;"></iframe>
+        <div style="display:flex;justify-content:center;margin:1rem 0 0;">
+          <a class="btn" href="https://tony-hinson.vercel.app/" target="_blank" rel="noopener">Visit Website</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for KSU Club Barbell project -->
+  <div class="modal" id="ksu-modal" aria-hidden="true">
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="KSU Club Barbell Website">
+      <button class="modal__close" data-close>&times;</button>
+      <div class="modal__body" style="padding:2rem;color:#222;">
+        <h2 style="margin:0 0 1rem 0;">KSU Club Barbell Official Site</h2>
+        <!-- Embedded iframe of the project site -->
+        <iframe src="https://kennesawclubbarbell.godaddysites.com/"
+          style="width:100%;height:65vh;border:1px solid #ddd;border-radius:12px;"></iframe>
+        <div style="display:flex;justify-content:center;margin:1rem 0 0;">
+          <a class="btn" href="https://kennesawclubbarbell.godaddysites.com/" target="_blank" rel="noopener">Visit
+            Website</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer style="text-align:center">Coded by Carinne Tzurdecker</footer>
+
+  <!-- =========================
+       MODAL CONTROLLER SCRIPT
+  ========================== -->
+  <script>
+    /* 
+      Reusable modal controller with fade/scale-in animation.
+      Handles opening/closing modals, accessibility, and keyboard support.
+    */
+    (function () {
+      // Open a modal (add .open, set aria-hidden, focus close button)
+      function openModal(modal) {
+        if (!modal) return;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        // Focus the close button for accessibility
+        const btn = modal.querySelector('[data-close]');
+        if (btn) btn.focus();
+      }
+      // Close a modal (remove .open, set aria-hidden)
+      function closeModal(modal) {
+        if (!modal) return;
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+
+      // Attach click handlers to all elements with [data-modal] (open modal)
+      document.querySelectorAll('[data-modal]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          const sel = btn.getAttribute('data-modal');
+          const modal = document.querySelector(sel);
+          openModal(modal);
+        });
+      });
+
+      // Attach close handlers to all modals
+      document.querySelectorAll('.modal').forEach(modal => {
+        // Close modal when clicking on the overlay (outside the panel)
+        modal.addEventListener('click', e => {
+          if (e.target === modal) closeModal(modal);
+        });
+        // Close modal when clicking the close button
+        modal.querySelectorAll('[data-close]').forEach(c => {
+          c.addEventListener('click', () => closeModal(modal));
+        });
+      });
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.modal.open').forEach(closeModal);
+        }
+      });
+    })();
+  </script>
 </body>
-</html> 
+
+
+</html>
