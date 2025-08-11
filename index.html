@@ -72,8 +72,8 @@
       .top-grid {
         grid-template-columns: 1fr 1.4fr 1.6fr; /* 3 columns for top */
         align-items: stretch;
-        column-gap: 12px;
-        row-gap: 32px
+        column-gap: 16px;
+        row-gap: 8px
       }
       /* Make all top-grid cards (except .top-name-card) the same height */
       .top-grid > .card:not(.top-name-card) {
@@ -444,7 +444,7 @@
       .content-grid {
         display: flex;
         flex-direction: column;
-        gap: 24px
+        gap: 8px
       }
 
       .col {
@@ -478,7 +478,106 @@
       color: var(--muted);
       font-size: .9rem
     }
-    
+    /* ================================
+   ULTRA-MOBILE TWEAKS (≤ 600px)
+   Add at the very end of your <style>
+================================ */
+@media (max-width: 600px) {
+  /* Fluid type */
+  h1 { font-size: clamp(1.5rem, 5.5vw, 2rem); line-height: 1.15; }
+  h2 { font-size: clamp(.95rem, 3.6vw, 1.05rem); }
+  body { font-size: clamp(.95rem, 3.7vw, 1rem); line-height: 1.55; }
+
+  /* Compact layout */
+  .wrap { margin: 20px auto; padding: 0 14px; gap: 12px; }
+  .top-grid, .content-grid { gap: 12px; }
+  .card { padding: 14px 16px; margin-bottom: 12px; border-radius: 16px; }
+  .stack { gap: 12px; }
+
+  /* Name card: stack + smaller avatar */
+  .row.name-card-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .ph.circle { display: none; }
+  .profile-image-circle { width: 88px; height: 88px; align-self: flex-end; }
+
+  /* Chips/pills a bit smaller and tighter */
+  .skill-chip, .pill {
+    font-size: .82rem;
+    padding: .3rem .55rem;
+    margin: 4px 6px 0 0;
+  }
+
+  /* Columns → single flow (you already use display: contents; keep it) */
+  .col { display: contents; }
+
+  /* Grids collapse nicely */
+  .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .grid-2 { grid-template-columns: 1fr; gap: 10px; }
+  .social-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  /* Buttons: full-width, big tap targets */
+  .btn { width: 100%; padding: .9rem 1rem; border-radius: 14px; }
+
+  /* Contact boxes wrap long text */
+  .contact-box { word-break: break-word; }
+
+  /* Work/Project items: single column, time below title */
+  .work-item, .proj-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .work-item .time, .proj-item .time { justify-self: start; }
+
+  /* Cards order (keeps your existing order, just ensuring tight spacing) */
+  .top-name-card { order: 0; }
+  .top-profile   { order: 1; }
+  .top-skills    { order: 2; }
+  .work-experience-card { order: 3; }
+  .projects-card { order: 4; }
+  .top-edu       { order: 5; }
+  .certification-card { order: 6; }
+  .contact-card  { order: 7; }
+  .reference-card{ order: 8; }
+  .social-card   { order: 9; }
+  .hobby-card    { order: 10; }
+
+  /* Modals: full-screen sheet on phones */
+  .modal { background: rgba(0,0,0,.45); }
+  .modal__panel {
+    width: 100vw; height: 100dvh; border-radius: 0;
+    transform: translateY(8px) scale(1); /* subtle slide */
+  }
+  .modal__body { padding: 0; }
+  .modal__body iframe { height: 70dvh; } /* keep embed tall but not cramped */
+  .modal__close {
+    top: 10px; right: 10px; width: 40px; height: 40px; font-size: 1.6rem;
+  }
+}
+
+/* Tiny phones (≤ 360px): make grids 1-up and shrink avatar/chips slightly */
+@media (max-width: 360px) {
+  .grid-4 { grid-template-columns: 1fr; }
+  .profile-image-circle { width: 76px; height: 76px; }
+  .skill-chip, .pill { font-size: .78rem; padding: .28rem .5rem; }
+}
+
+/* Quality-of-life: prevent background scroll while modal open */
+body:has(.modal.open) { overflow: hidden; }
+@media (max-width: 700px) {
+  .row.name-card-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .profile-image-circle {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto;
+    order: -1; /* Puts it above the text */
+  }
+}
+
   </style>
 </head>
 
@@ -874,6 +973,5 @@
     })();
   </script>
 </body>
-
 
 </html>
