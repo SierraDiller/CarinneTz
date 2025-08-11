@@ -201,6 +201,17 @@
       border-radius: 50%;
       background: #e9e4d3;
       border: 1px solid #d8d0b8;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .profile-image-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
     }
 
     /* One-liner under name */
@@ -600,7 +611,9 @@ body:has(.modal.open) { overflow: hidden; }
               </div>
             </div>
           </div>
-          <div class="profile-image-circle"></div> <!-- Profile image (right) -->
+          <div class="profile-image-circle">
+            <img src="fprofPic.png" alt="Carinne Tzurdecker profile photo" />
+          </div>
         </div>
       </section>
 
@@ -874,7 +887,7 @@ body:has(.modal.open) { overflow: hidden; }
       <button class="modal__close" data-close>&times;</button>
       <div class="modal__body">
         <!-- Image/diagram for SEO Content Agent -->
-        <img src="Carinne (3).svg" alt="SEO Content Agent Diagram">
+        <img src="file:///C:/Users/carin/Downloads/Carinne%20(3).svg" alt="SEO Content Agent Diagram">
       </div>
     </div>
   </div>
