@@ -1,992 +1,419 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Carinne Tzurdecker — Automation Engineer</title>
-
-  <style>
-    /* =========================
-       CSS VARIABLES (THEME)
-    ========================== */
-    :root {
-      --bg: #FFF2E0;              /* Main background color */
-      --card: #ffffff;            /* Card background */
-      --ink: #141417;             /* Main text color */
-      --muted: #6b6b6b;           /* Muted/secondary text */
-      --line: #ece6d6;            /* Border/line color */
-      --accent: #C0C9EE;          /* Accent color (tags, highlights) */
-      --accent-ink: #0f1220;      /* Accent text color */
-      --radius: 18px;             /* Border radius for cards */
-      --grid-line: #E7E1CF;       /* Grid background lines */
-      --shadow-sm: 0 1px 0 rgba(10, 10, 10, .04);   /* Small shadow */
-      --shadow-md: 0 8px 20px rgba(20, 20, 20, .06);/* Medium shadow */
-      --shadow-lg: 0 24px 48px rgba(20, 20, 20, .10);/* Large shadow */
-    }
-
-    * {
-      box-sizing: border-box /* Use border-box for all elements */
-    }
-
-    html,
-    body {
-      height: 100% /* Full height for html and body */
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      /* Subtle grid background using two linear gradients */
-      background-image:
-        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-      background-size: 40px 40px;
-      color: var(--ink);
-      font: 16px/1.55 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    /* Main wrapper for the page content */
-    .wrap {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 0 20px;
-      display: grid;
-      gap: 28px;
-    }
-
-    /* Top and content grid layouts */
-    .top-grid,
-    .content-grid {
-      display: grid;
-      gap: 28px
-    }
-
-    /* Desktop grid layouts */
-    @media (min-width:1025px) {
-      .content-grid {
-        grid-template-columns: 300px minmax(0, 1.9fr); /* Sidebar + main */
-        column-gap: 20px
-      }
-
-      .top-grid {
-        grid-template-columns: 1fr 1.4fr 1.6fr; /* 3 columns for top */
-        align-items: stretch;
-        column-gap: 16px;
-        row-gap: 8px
-      }
-      /* Make all top-grid cards (except .top-name-card) the same height */
-      .top-grid > .card:not(.top-name-card) {
-        height: 90%;
-        min-height: 260px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-      }
-      /* Ensure .top-skills fills the height */
-      .top-skills {
-        height: 100%;
-        min-height: 260px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-      }
-      .top-skills > div {
-        flex: 1 1 auto;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        align-content: flex-start;
-      }
-    }
-
-    /* Card component styling */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 20px 22px 22px 22px;
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 18px;
-    }
-
-    .card:last-child {
-      margin-bottom: 0;
-    }
-
-
-    /* Headings */
-    h1,
-    h2,
-    h3 {
-      margin: 0 0 .5rem
-    }
-
-    h1 {
-      font-size: 2rem;
-      line-height: 1.2
-    }
-
-    h2 {
-      font-size: 1.05rem;
-      letter-spacing: .02em;
-      text-transform: uppercase
-    }
-
-    .muted {
-      color: var(--muted) /* Muted text color */
-    }
-
-    /* Stack utility for vertical spacing */
-    .stack {
-      display: flex;
-      flex-direction: column;
-      gap: 18px; /* Increased gap for more vertical space between items */
-    }
-
-    /* Row utility for horizontal alignment */
-    .row {
-      display: flex;
-      gap: 12px;
-      align-items: center
-    }
-
-    /* Tag badge (e.g. job title) */
-    .tag {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--accent-ink);
-      padding: .35rem .7rem;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: .85rem;
-    }
-
-    /* Skill and pill badges */
-    .skill-chip,
-    .pill {
-      display: inline-block;
-      margin: 6px 6px 0 0;
-      padding: .35rem .6rem;
-      border-radius: 999px;
-      background: #f6f3e9;
-      border: 1px solid var(--line);
-      font-size: .9rem;
-      text-align: center;
-      vertical-align: middle;
-    }
-
-    .pill {
-      background: #efe9d6;
-      font-size: .85rem
-    }
-
-    /* Special row for name card */
-    .row.name-card-row {
-      justify-content: space-between;
-      gap: 32px
-    }
-
-    /* Placeholder circle (left of name) */
-    .ph.circle {
-      height: 120px;
-      width: 120px;
-      border-radius: 24px
-    }
-
-    /* Profile image circle (right of name) */
-    .profile-image-circle {
-      height: 160px;
-      width: 160px;
-      border-radius: 50%;
-      background: #e9e4d3;
-      border: 1px solid #d8d0b8;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .profile-image-circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-      display: block;
-    }
-
-    /* One-liner under name */
-    .name-oneliner {
-      margin-top: 1.1rem;
-      color: var(--muted);
-      font-size: 1.05rem;
-      font-weight: 500;
-      letter-spacing: .01em
-    }
-
-    /* Work and project item cards */
-    .work-item,
-    .proj-item {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px 12px;
-      background: #fffdfa;
-    }
-
-    .work-item h3,
-    .proj-item h3 {
-      margin: 0;
-      font-size: 1rem
-    }
-
-    /* Time badge for jobs/projects */
-    .time {
-      font-size: .85rem;
-      font-weight: 400;
-      background: var(--accent);
-      padding: .2rem .5rem;
-      border-radius: 8px;
-      align-self: start;
-      border: 1px solid #C0C9EE
-    }
-
-    /* Utility grid layouts */
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px
-    }
-
-    /* Contact box styling */
-    .contact-box {
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: #fffdfa
-    }
-
-    /* Left column helpers (desktop only) */
-    @media (min-width:1025px) {
-      .left-col-card .grid-4 {
-        grid-template-columns: repeat(2, minmax(120px, 1fr));
-        gap: 10px 12px
-      }
-
-      .left-col-card .grid-2 {
-        grid-template-columns: 1fr;
-        gap: 12px
-      }
-
-      .left-col-card .contact-box {
-        padding: 10px 12px;
-        overflow-wrap: anywhere
-      }
-    }
-
-    /* Social button grid */
-    .social-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px
-    }
-
-    /* Button styling */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: .65rem .95rem;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: #fffdfa;
-      color: var(--ink);
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: var(--shadow-sm);
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-md)
-    }
-
-    .btn:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px
-    }
-
-    /* Education compact layout */
-    .top-edu .edu-compact {
-      display: flex;
-      flex-direction: column;
-      gap: 8px
-    }
-
-    .top-edu .edu-line {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap
-    }
-
-    .top-edu .degree {
-      font-weight: 600;
-      line-height: 1.4
-    }
-
-    .top-edu .year {
-      background: #f3efdf;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: .35rem .75rem;
-      font-weight: 700;
-      font-size: .85rem
-    }
-
-    /* Top name card accent (desktop only) */
-    @media (min-width:1025px) {
-      .top-name-card {
-        grid-column: 1/4;
-        width: 100%;
-        border: 1px solid #dfe4fb;
-        box-shadow: 0 12px 30px rgba(192, 201, 238, .35)
-      }
-    }
-
-    /* ================================
-       MODAL STYLES (Reusable)
-    ================================ */
-    .modal {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, .55);
-      z-index: 1000;
-      opacity: 0;
-      transition: opacity .25s ease;
-    }
-
-    .modal.open {
-      display: flex;
-      opacity: 1
-    }
-
-    .modal__panel {
-      position: relative;
-      background: #fff;
-      border-radius: 20px;
-      width: 90vw;
-      height: 90vh;
-      box-shadow: var(--shadow-lg);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      transform: translateY(12px) scale(.98);
-      opacity: 0;
-      transition: transform .28s ease, opacity .28s ease;
-    }
-
-    .modal.open .modal__panel {
-      transform: translateY(0) scale(1);
-      opacity: 1
-    }
-
-    .modal__close {
-      position: absolute;
-      top: 10px;
-      right: 16px;
-      background: #fff;
-      border: 1px solid #e7e7e7;
-      font-size: 1.3rem;
-      color: #333;
-      cursor: pointer;
-      line-height: 1;
-      border-radius: 999px;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .modal__body {
-      flex: 1;
-      overflow: auto;
-      padding: 0;
-      border-radius: 0 0 20px 20px
-    }
-
-    .modal__body img,
-    .modal__body iframe {
-      display: block;
-      width: 100%;
-      height: auto
-    }
-
-    /* Remove transitions for users who prefer reduced motion */
-    @media (prefers-reduced-motion:reduce) {
-
-      .btn,
-      .modal,
-      .modal__panel {
-        transition: none
-      }
-    }
-
-    /* ================================
-       MOBILE/TABLET STACKING
-    ================================ */
-    @media (max-width:1024px) {
-
-      .wrap,
-      .top-grid,
-      .content-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 8px
-      }
-
-      .col {
-        display: contents
-      }
-
-      .card {
-        width: 100%;
-        min-height: 160px
-      }
-
-      /* Order of cards for mobile layout */
-      .top-name-card { order: 0 }
-      .top-profile { order: 1 }
-      .top-skills { order: 2 }
-      .work-experience-card { order: 3 }
-      .projects-card { order: 4 }
-      .top-edu { order: 5 }
-      .certification-card { order: 6 }
-      .contact-card { order: 7 }
-      .reference-card { order: 8 }
-      .social-card { order: 9 }
-      .hobby-card { order: 10 }
-    }
-
-    /* Footer styling */
-    footer {
-      max-width: 1200px;
-      margin: 10px auto 20px;
-      padding: 0 20px 30px 20px;
-      color: var(--muted);
-      font-size: .9rem
-    }
-    /* ================================
-   ULTRA-MOBILE TWEAKS (≤ 600px)
-   Add at the very end of your <style>
-================================ */
-@media (max-width: 600px) {
-  /* Fluid type */
-  h1 { font-size: clamp(1.5rem, 5.5vw, 2rem); line-height: 1.15; }
-  h2 { font-size: clamp(.95rem, 3.6vw, 1.05rem); }
-  body { font-size: clamp(.95rem, 3.7vw, 1rem); line-height: 1.55; }
-
-  /* Compact layout */
-  .wrap { margin: 20px auto; padding: 0 14px; gap: 12px; }
-  .top-grid, .content-grid { gap: 12px; }
-  .card { padding: 14px 16px; margin-bottom: 12px; border-radius: 16px; }
-  .stack { gap: 12px; }
-
-  /* Name card: stack + smaller avatar */
-  .row.name-card-row { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .ph.circle { display: none; }
-  .profile-image-circle { width: 88px; height: 88px; align-self: flex-end; }
-
-  /* Chips/pills a bit smaller and tighter */
-  .skill-chip, .pill {
-    font-size: .82rem;
-    padding: .3rem .55rem;
-    margin: 4px 6px 0 0;
-  }
-
-  /* Columns → single flow (you already use display: contents; keep it) */
-  .col { display: contents; }
-
-  /* Grids collapse nicely */
-  .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .grid-2 { grid-template-columns: 1fr; gap: 10px; }
-  .social-grid { grid-template-columns: 1fr; gap: 10px; }
-
-  /* Buttons: full-width, big tap targets */
-  .btn { width: 100%; padding: .9rem 1rem; border-radius: 14px; }
-
-  /* Contact boxes wrap long text */
-  .contact-box { word-break: break-word; }
-
-  /* Work/Project items: single column, time below title */
-  .work-item, .proj-item {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  .work-item .time, .proj-item .time { justify-self: start; }
-
-  /* Cards order (keeps your existing order, just ensuring tight spacing) */
-  .top-name-card { order: 0; }
-  .top-profile   { order: 1; }
-  .top-skills    { order: 2; }
-  .work-experience-card { order: 3; }
-  .projects-card { order: 4; }
-  .top-edu       { order: 5; }
-  .certification-card { order: 6; }
-  .contact-card  { order: 7; }
-  .reference-card{ order: 8; }
-  .social-card   { order: 9; }
-  .hobby-card    { order: 10; }
-
-  /* Modals: full-screen sheet on phones */
-  .modal { background: rgba(0,0,0,.45); }
-  .modal__panel {
-    width: 100vw; height: 100dvh; border-radius: 0;
-    transform: translateY(8px) scale(1); /* subtle slide */
-  }
-  .modal__body { padding: 0; }
-  .modal__body iframe { height: 70dvh; } /* keep embed tall but not cramped */
-  .modal__close {
-    top: 10px; right: 10px; width: 40px; height: 40px; font-size: 1.6rem;
-  }
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Carinne Tzurdecker — Automation Engineer</title>
+<style>
+/* --- CSS Variables & Resets --- */
+:root {
+  --bg:#FFF2E0;--card:#fff;--ink:#141417;--muted:#6b6b6b;--line:#ece6d6;--accent:#C0C9EE;--accent-ink:#0f1220;--radius:18px;--grid:#E7E1CF;
+  --sh-sm:0 1px 0 rgba(10,10,10,.04);--sh-md:0 8px 20px rgba(20,20,20,.06);--sh-lg:0 24px 48px rgba(20,20,20,.10)
 }
+*,*:before,*:after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;color:var(--ink);font:16px/1.55 "Inter",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);background-image:linear-gradient(to right,var(--grid)1px,transparent 1px),linear-gradient(to bottom,var(--grid)1px,transparent 1px);background-size:40px 40px}
+h1,h2,h3{margin:0 0 .5rem}
+h1{font-size:2rem;line-height:1.2} h2{text-transform:uppercase;letter-spacing:.02em;font-size:1.05rem}
+.muted{color:var(--muted)} .muted-link{color:#b0b0b0;text-decoration:none}
+.wrap{max-width:1200px;margin:40px auto;padding:0 20px;display:grid;gap:28px}
+.top-grid,.content-grid{display:grid;gap:20px}
+.col{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px 24px;box-shadow:var(--sh-sm);margin:0 0 18px}
+.card:last-child{margin:0}
+.tag{display:inline-block;background:var(--accent);color:var(--accent-ink);padding:.35rem .7rem;border-radius:999px;font:700 .85rem/1 inherit}
+.skill-chip,.pill{display:inline-block;margin:6px 6px 0 0;padding:.35rem .6rem;border-radius:999px;border:1px solid var(--line)}
+.skill-chip{background:#f6f3e9;font-size:.9rem}
+.pill{background:#efe9d6;font-size:.85rem}
+.stack{display:flex;flex-direction:column;gap:18px}
+.row{display:flex;gap:12px;align-items:center}
+.row.name-card-row{justify-content:space-between;gap:32px}
 
-/* Tiny phones (≤ 360px): make grids 1-up and shrink avatar/chips slightly */
-@media (max-width: 360px) {
-  .grid-4 { grid-template-columns: 1fr; }
-  .profile-image-circle { width: 76px; height: 76px; }
-  .skill-chip, .pill { font-size: .78rem; padding: .28rem .5rem; }
+.bold-link {color: #141417; text-decoration: none; font-weight: normal;
+}.full{grid-column:1/-1}
+.ph.circle{height:120px;width:120px;border-radius:24px}
+.profile-image-circle{height:160px;width:160px;border-radius:50%;background:#e9e4d3;border:1px solid #d8d0b8;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.profile-image-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.name-oneliner{margin-top:1.1rem;color:var(--muted);font:500 1.05rem/1.4 inherit;letter-spacing:.01em}
+.work-item,.proj-item{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fffdfa;display:grid;grid-template-columns:1fr auto;gap:8px 12px;transition:transform .2s,box-shadow .2s}
+.work-item h3,.proj-item h3{margin:0;font-size:1rem}
+.time{font-size:.85rem;background:var(--accent);padding:.2rem .5rem;border-radius:8px;align-self:start;border:1px solid var(--accent)}
+/* Make project cards match work experience cards */
+.proj-item{background:#fffdfa;border:1px solid var(--line);}
+.grid-4,.grid-2{display:grid;gap:14px}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.contact-box{padding:12px;border:1px solid var(--line);border-radius:12px;background:#fffdfa}
+.social-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.65rem .95rem;border-radius:12px;border:1px solid var(--line);background:#fffdfa;color:var(--ink);font-weight:600;text-decoration:none;box-shadow:var(--sh-sm);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--sh-md)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.edu-compact{display:flex;flex-direction:column;gap:8px}
+.edu-line{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.degree{font-weight:600;line-height:1.4}
+.year{background:#f3efdf;border:1px solid var(--line);border-radius:10px;padding:.35rem .75rem;font-size:.85rem}
+a:hover .work-item{transform:translateY(-2px);box-shadow:var(--sh-md);cursor:pointer}
+.projects-card{perspective:1200px}
+.proj-item.work-item{transform-style:preserve-3d;transform-origin:center bottom}
+
+/* --- Modal Styles --- */
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(2px);z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal.open{opacity:1;pointer-events:auto}
+.modal__panel{max-width:1080px;width:min(92vw,1080px);height:auto;max-height:90vh;background:#fff;border-radius:20px;box-shadow:0 24px 120px rgba(0,0,0,.55);overflow:hidden;transform:scale(.97) translateY(40px);opacity:0;transition:transform .25s cubic-bezier(.22,.61,.36,1),opacity .25s cubic-bezier(.22,.61,.36,1);pointer-events:none;display:flex;flex-direction:column}
+.modal.open .modal__panel{transform:scale(1) translateY(0);opacity:1;pointer-events:auto}
+.modal__close{position:absolute;top:10px;right:16px;background:#fff;border:1px solid rgb(238,232,232);font-size:1.3rem;color:#333;line-height:1;border-radius:999px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-sm);cursor:pointer;z-index:2;transition:background .18s,color .18s,border-color .18s}
+.modal__close:hover,.modal__close:focus{background:#f3f3f3;color:#333;border:1px solid rgb(238,232,232)}
+.modal__body{flex:1;overflow:auto;padding:0;border-radius:0 0 20px 20px}
+.modal__body :is(img,iframe){width:100%;height:auto;max-height:62vh;display:block;border-radius:12px}
+.modal:not(#seo-modal) .modal__body{display:grid;align-content:start;gap:16px;padding:1.25rem 1.5rem;color:#222;box-sizing:border-box}
+.modal:not(#seo-modal) .modal__body .btn{justify-self:center;margin:4px 0 0}
+#seo-modal .modal__body{overflow-y:auto;max-height:100%}
+@media (max-width:1024px){
+  .wrap,.top-grid,.content-grid{display:flex;flex-direction:column;gap:15px}
+  .col{display:contents}
+  .card{width:100%;min-height:160px;margin:0 0 0 0;}
+  .top-name-card{order:0}.top-profile{order:1}.top-skills{order:2}.work-experience-card{order:3}.projects-card{order:4}.top-edu{order:5}.certification-card{order:6}.contact-card{order:7}.reference-card{order:8}.social-card{order:9}.hobby-card{order:10}
 }
-
-/* Quality-of-life: prevent background scroll while modal open */
-body:has(.modal.open) { overflow: hidden; }
-@media (max-width: 700px) {
-  .row.name-card-row {
+@media (min-width:1025px){
+  .content-grid{grid-template-columns:300px minmax(0,1.9fr);column-gap:20px}
+  .top-grid{grid-template-columns:1fr 1.4fr 1.6fr;gap:8px 16px}
+  .top-grid>.card:not(.top-name-card),
+  .top-skills,
+  .top-edu,
+  .about-my-work-card {
+    min-height:260px;
+    display:flex;
+    flex-direction:column;
+    padding:24px 24px 16px 24px; /* Reduced bottom padding from 24px to 16px */
+    box-sizing:border-box;
+  }
+  .top-skills>div{flex:1;display:flex;flex-wrap:wrap;align-items:flex-start;align-content:flex-start}
+  .top-name-card{grid-column:1/4;border:1px solid #dfe4fb;box-shadow:0 12px 30px rgba(192,201,238,.35)}
+  .left-col-card .grid-4{grid-template-columns:repeat(2,minmax(120px,1fr));gap:10px 12px}
+  .left-col-card .grid-2{grid-template-columns:1fr;gap:12px}
+  .left-col-card .contact-box{padding:10px 12px;overflow-wrap:anywhere}
+  /* Add gap between left column cards for desktop */
+  .content-grid > .col {
+    display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
     gap: 12px;
   }
+  /* Remove bottom margin from cards in left column to avoid double spacing */
+  .content-grid > .col > .card {
+    margin-bottom: 0;
+  }
+  /* Reduce gap below the top 3 cards */
+  .top-grid > .card.top-edu,
+  .top-grid > .card.top-profile,
+  .top-grid > .card.top-skills {
+    margin-bottom: 6px;
+  }
+}
+@media (max-width:700px){
+  .row.name-card-row{flex-direction:column;align-items:center;text-align:center;gap:12px}
+  .profile-image-circle{width:96px;height:96px;margin:0 auto;order:-1}
+}
+@media (max-width:600px){
+  h1{font-size:clamp(1.5rem,5.5vw,2rem);line-height:1.15}
+  h2{font-size:clamp(.95rem,3.6vw,1.05rem)}
+  body{font-size:clamp(.95rem,3.7vw,1rem)}
+  .wrap{margin:20px auto;padding:0 14px;gap:15px}
+  .top-grid,.content-grid{gap:15px}
+  .card{padding:14px 16px;margin:0;border-radius:16px}
+  .stack{gap:12px}
+  .ph.circle{display:none}
+  .profile-image-circle{width:88px;height:88px;align-self:flex-end}
+  .skill-chip,.pill{font-size:.82rem;padding:.3rem .55rem;margin:4px 6px 0 0}
+  .grid-4{grid-template-columns:repeat(2,1fr);gap:10px}
+  .grid-2,.social-grid{grid-template-columns:1fr;gap:10px}
+  .btn{width:100%;padding:.9rem 1rem;border-radius:14px}
+  .work-item,.proj-item{grid-template-columns:1fr;gap:8px}
+  .work-item .time,.proj-item .time{justify-self:start}
+  .modal__panel{width:100vw;height:100dvh;border-radius:0}
+  .modal__body iframe{height:70dvh}
+  .modal__close{top:10px;right:10px;width:40px;height:40px;font-size:1.6rem}
+}
+@media (max-width:360px){
+  .grid-4{grid-template-columns:1fr}
+  .profile-image-circle{width:76px;height:76px}
+  .skill-chip,.pill{font-size:.78rem;padding:.28rem .5rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .btn,.proj-item.work-item,.modal,.modal__panel{transition:none}
+  .proj-item.work-item.is-flipping{transform:none}
+}
+body:has(.modal.open){overflow:hidden}
+.centered{text-align:center}
+.no-decor{color:inherit;text-decoration:none;display:block}
+.cursor{cursor:pointer}
+.svg-flag{vertical-align:middle;margin-right:6px}
+.k{font-size:.95em}
+/* --- Modal Scrollbar & Responsive --- */
+#seo-modal .modal__panel{width:min(96vw,1280px);height:94vh}
+#seo-modal .modal__body{padding:0;overflow:auto}
+#seo-modal .modal__body :is(img,svg,iframe){display:block;width:100%;height:auto;max-height:none;border-radius:0}
+#seo-modal .modal__body{scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.25) transparent}
+#seo-modal .modal__body::-webkit-scrollbar{width:8px}
+#seo-modal .modal__body::-webkit-scrollbar-track{background:transparent}
+#seo-modal .modal__body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.18);border-radius:8px}
+#seo-modal .modal__body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.28)}
+@media (max-width:600px){
+  .modal__panel{width:92vw;height:auto;max-height:88vh;border-radius:16px}
+  .modal:not(#seo-modal) .modal__body{padding:1rem;gap:12px;align-items:center}
+  .modal__body h2{margin:0 0 .75rem;font-size:clamp(1rem,4.6vw,1.25rem);text-align:center}
+  .modal__body :is(img,iframe){width:100%;height:auto;max-height:50vh;border-radius:12px}
+  .modal:not(#seo-modal) .modal__body .btn{width:100%;margin:.75rem 0 0}
+  .modal__close{width:20px;height:20px;font-size:1.2rem;top:8px;right:8px}
+  #seo-modal .modal__panel{width:92vw;height:auto;max-height:88vh;border-radius:16px}
+  #seo-modal .modal__body{padding:0;overflow:auto;-webkit-overflow-scrolling:touch}
+  #seo-modal .modal__body :is(img,svg,iframe){width:100%;height:auto;max-height:none;border-radius:0}
+  #seo-modal .modal__body{scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.22) transparent}
+  #seo-modal .modal__body::-webkit-scrollbar{width:6px}
+  #seo-modal .modal__body::-webkit-scrollbar-track{background:transparent}
+  #seo-modal .modal__body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.22);border-radius:8px}
+}
+/* BuildHer modal: fixed width, vertical scroll only, minimal scrollbar */
+#buildher-modal .modal__panel{width:clamp(720px,92vw,1080px);height:min(92vh,1200px);display:flex;flex-direction:column}
+#buildher-modal .modal__body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;display:grid;grid-template-rows:auto 1fr auto;gap:12px;padding:12px 16px 8px;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.22) transparent;scrollbar-gutter:stable both-edges}
+#buildher-modal .modal__body::-webkit-scrollbar{width:8px}
+#buildher-modal .modal__body::-webkit-scrollbar-track{background:transparent}
+#buildher-modal .modal__body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.22);border-radius:8px}
+#buildher-modal .modal__body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.28)}
+#buildher-modal .modal__body iframe{display:block;width:100%;height:75vh;min-height:480px;border-radius:0}
+#buildher-modal .modal__body>div[style*="justify-content:center"]{margin:6px 0 6px!important}
 
-  .profile-image-circle {
-    width: 96px;
-    height: 96px;
-    margin: 0 auto;
-    order: -1; /* Puts it above the text */
+@media (min-width:1025px){
+  .top-edu,.top-profile,.top-skills{
+    height:260px;display:flex;flex-direction:column;justify-content:flex-start;
+    padding:24px;box-sizing:border-box
+  }
+  .top-edu h2,.top-profile h2,.top-skills h2{margin:0 0 12px}
+
+  .top-skills>div{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-content:start
+  }
+  .top-skills .skill-chip{
+    margin:0;padding:.32rem .6rem;font-size:.86rem;text-align:center;white-space:nowrap
   }
 }
 
-  </style>
+
+
+
+</style>
 </head>
-
 <body>
-  <main class="wrap">
-    <!-- =========================
-         TOP STRIP (Header Section)
-    ========================== -->
-    <section class="top-grid">
-      <!-- Name Card (spans top) -->
-      <section class="card top-name-card">
-        <div class="row name-card-row">
-          <div class="row" style="flex:1 1 0;min-width:0;">
-            <div class="ph circle" style="flex:0 0 1px;border:none;"></div> <!-- Placeholder for profile image -->
-            <div>
-              <span class="tag">Automation Engineer</span> <!-- Job title tag -->
-              <h1 style="margin-top:.6rem;">Hello, I’m<br />Carinne Tzurdecker</h1> <!-- Name -->
-              <div class="name-oneliner">
-                Building automation that quietly powers teams—clean UX up front, durable ops in the back.
+<main class="wrap">
+  <!-- Top Section: Name, Education, About, Skills -->
+  <section class="top-grid">
+    <section class="card top-name-card">
+      <div class="row name-card-row">
+        <div class="row" style="flex:1 1 0;min-width:0">
+          <div class="ph circle" style="flex:0 0 1px;border:none"></div>
+          <div>
+            <span class="tag">Automation Engineer</span>
+            <h1 style="margin-top:.6rem">Hello, I’m<br/>Carinne Tzurdecker</h1>
+            <div class="name-oneliner">Building automation that quietly powers teams—clean UX up front, durable ops in the back.</div>
+          </div>
+        </div>
+        <div class="profile-image-circle">
+          <img src="profPic.png" alt="Carinne Tzurdecker"/>
+        </div>
+      </div>
+    </section>
+    <section class="card top-edu">
+      <h2>Education</h2>
+      <div class="edu-compact">
+        <div class="edu-line"><span class="year">2022–2025</span><strong class="degree">B.S. Computer Science — Concentration in A.I.</strong></div>
+        <div class="school">Kennesaw State University</div>
+      </div>
+    </section>
+    <section class="card top-profile">
+      <h2>About My Work</h2>
+      <p class="muted">Automation-focused engineer building seamless systems that keep companies running smoothly. Strong with Make, n8n, JSON workflows; driven by measurable results and hands-off ops.</p>
+    </section>
+    <section class="card top-skills">
+      <h2>Skills</h2>
+      <div>
+        <!-- Skills in one line, no extra markup -->
+        <span class="skill-chip">HTML</span><span class="skill-chip">CSS</span><span class="skill-chip">JS</span>
+        <span class="skill-chip">React</span><span class="skill-chip">GitHub</span><span class="skill-chip">Python</span>
+        <span class="skill-chip">Java</span><span class="skill-chip">JSON</span><span class="skill-chip">API Integration</span>
+        <span class="skill-chip">Make / n8n</span><span class="skill-chip">Workflow Design</span><span class="skill-chip">Web Design</span>
+      </div>
+    </section>
+  </section>
+  <!-- Main Content: Left and Right Columns -->
+  <section class="content-grid">
+    <aside class="col">
+      <!-- Contact -->
+      <section class="card left-col-card contact-card">
+        <h2>Contact</h2>
+        <div class="stack">
+          <a class="btn hvr bold-link" href="tel:+14703659019" style="margin-bottom:8px; justify-content: flex-start; text-align: left;"><span class="bold-link">Call: +1 (470) 365-9019</span></a>
+          <a class="btn hvr bold-link" href="mailto:ctzurdecker@outlook.com" style="justify-content: flex-start; text-align: left;"><span class="bold-link">Email: ctzurdecker@outlook.com</span></a>
+          <div class="muted centered">
+            <svg width="28" height="20" viewBox="0 0 28 20" class="svg-flag" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1" y="8" width="6" height="11" fill="#B0B0B0" stroke="#888"/><rect x="8" y="4" width="6" height="15" fill="#D0D0D0" stroke="#888"/>
+              <rect x="15" y="11" width="5" height="8" fill="#B0B0B0" stroke="#888"/><rect x="21" y="6" width="6" height="13" fill="#C0C0C0" stroke="#888"/>
+              <rect x="10" y="13" width="2" height="3" fill="#888"/><rect x="23" y="14" width="2" height="3" fill="#888"/>
+            </svg>Currently Based in Atlanta, GA
+          </div>
+        </div>
+      </section>
+      <!-- Certification -->
+      <section class="card left-col-card certification-card">
+        <h2>Certification</h2>
+        <div class="stack">
+          <div class="row"><span class="pill">2025</span><div><strong>Make.com</strong><div class="k muted">Automation Engineering</div></div></div>
+          <div class="row"><span class="pill">2022</span><div><strong>SheCodes</strong><div class="k muted">Frontend Basics</div></div></div>
+        </div>
+      </section>
+      <!-- Hobbies & Dislikes -->
+      <section class="card left-col-card hobby-card">
+        <h2>Hobby & Interest</h2>
+        <div class="grid-4">
+          <div class="contact-box centered">Lift</div><div class="contact-box centered">Snowboard</div>
+          <div class="contact-box centered">Travel</div><div class="contact-box centered">Guitar</div>
+        </div>
+        <h2 style="margin-top:1.5em">Dislikes</h2>
+        <div class="grid-4">
+          <div class="contact-box centered">Leg Day</div><div class="contact-box centered">Olives</div>
+        </div>
+      </section>
+      <!-- References -->
+      <section class="card left-col-card reference-card">
+        <h2>References</h2>
+        <div class="grid-2" style="grid-template-columns:1fr;gap:12px">
+          <div class="contact-box"><strong>Julian Trumper</strong><br/>Rankey Founder<div class="k"><a class="muted-link" href="mailto:nabeel@example.com">nabeel@example.com</a></div></div>
+          <div class="contact-box"><strong>Peter Thompkins</strong><br/>Current Employer: Hospitality<div class="k"><a class="muted-link" href="mailto:hhanzala@example.com">hhanzala@example.com</a></div></div>
+        </div>
+      </section>
+      <!-- Social Links -->
+      <section class="card left-col-card social-card">
+        <h2>More of Me</h2>
+        <div class="social-grid">
+          <a class="btn" href="https://www.linkedin.com/in/carinnetzurdecker/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="https://github.com/carinnetzur" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="https://www.facebook.com/carinne.tzurdecker.5/" target="_blank" rel="noopener">Facebook</a>
+          <a class="btn" href="https://www.instagram.com/carinneeeeee/" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </section>
+    </aside>
+    <section class="col right-col">
+      <!-- Work Experience -->
+      <section class="card work-experience-card">
+        <h2>Work Experience</h2>
+        <div class="stack">
+          <!-- Each job is a single block, no extra markup -->
+          <a href="https://rankey.co.il/" target="_blank" rel="noopener" class="no-decor">
+            <div class="work-item cursor">
+              <h3>Automation Engineer — Rankey</h3><div class="time">May – Present</div>
+              <div class="muted full">Built an AI automation that plans, writes, images, posts, and logs weekly content across multiple WordPress sites with retries, logging, and per‑client configs.</div>
+              <div class="full" style="margin-top:8px">
+                <span class="skill-chip">Make</span><span class="skill-chip">API Integration</span><span class="skill-chip">JSON</span>
+                <span class="skill-chip">Workflow Design</span><span class="skill-chip">Automation Design</span><span class="skill-chip">Process Automation</span>
+                <span class="skill-chip">Prompt Engineering</span><span class="skill-chip">Technical Presentation</span>
               </div>
             </div>
+          </a>
+          <div class="work-item">
+            <h3>Startup Founder — BuildHer</h3><div class="time">July – Present</div>
+            <div class="muted full">Websites for strength coaches/teams: onboarding, training plans, results, and scheduling.</div>
+            <div class="full" style="margin-top:8px">
+              <span class="skill-chip">Sales</span><span class="skill-chip">Web Design</span><span class="skill-chip">HTML</span>
+              <span class="skill-chip">JavaScript</span><span class="skill-chip">CSS</span><span class="skill-chip">JSON</span><span class="skill-chip">GitHub</span>
+              <span class="skill-chip">Client Lifecycle</span>
+            </div>
           </div>
-          <div class="profile-image-circle">
-            <img src="profPic.png" alt="Carinne Tzurdecker profile photo" />
-          </div>
+          <a href="https://www.poozle.io/" target="_blank" rel="noopener" class="no-decor">
+            <div class="work-item cursor">
+              <h3>Poozle — Frontend Intern</h3><div class="time">Jun 2024 – Jan 2025</div>
+              <div class="muted full">Sign‑in page, interactive job cards, and Google Location API for onboarding.</div>
+              <div class="full" style="margin-top:8px">
+                <span class="skill-chip">React Native</span><span class="skill-chip">Expo</span><span class="skill-chip">HTML</span>
+                <span class="skill-chip">CSS</span><span class="skill-chip">JavaScript</span><span class="skill-chip">Node.js</span><span class="skill-chip">GitHub</span>
+              </div>
+            </div>
+          </a>
         </div>
       </section>
-
-      <!-- Education Card -->
-      <section class="card top-edu">
-        <h2>Education</h2>
-        <div class="edu-compact">
-          <div class="edu-line">
-            <span class="year">2022–2025</span>
-            <strong class="degree">B.S. Computer Science — Concentration in A.I.</strong>
-          </div>
-          <div class="school">Kennesaw State University</div>
-        </div>
-      </section>
-
-      <!-- About My Work Card -->
-      <section class="card top-profile">
-        <h2>About My Work</h2>
-        <p class="muted">
-          Automation-focused engineer passionate about building seamless systems that keep companies running smoothly.
-          Robust automation is behind the scenes. Experienced with Make, n8n, and advanced JSON workflows; driven by measurable results and effortless, hands-off solutions.
-        </p>
-      </section>
-
-      <!-- Skills Card -->
-      <section class="card top-skills">
-        <h2>Skills</h2>
-        <div>
-          <!-- List of skill chips -->
-          <span class="skill-chip">HTML</span>
-          <span class="skill-chip">CSS</span>
-          <span class="skill-chip">JS</span>
-
-          <span class="skill-chip">React</span>
-          <span class="skill-chip">Node</span>
-          <span class="skill-chip">Python</span>
-          <span class="skill-chip">Java</span>
-          <span class="skill-chip">JSON</span>
-          <span class="skill-chip">API Integration</span>
-          <span class="skill-chip">Make / n8n</span>
-          <span class="skill-chip">Workflow Design</span>
-          <span class="skill-chip">Web Design</span>
-          <span class="skill-chip">GitHub</span>
+      <!-- Projects -->
+      <section class="card projects-card">
+        <h2>Projects</h2>
+        <div class="stack">
+          <!-- Each project: one line per project, minimal markup -->
+          <a href="#" data-modal="#seo-modal" class="no-decor">
+            <div class="proj-item work-item cursor">
+              <h3>SEO Content Agent</h3><div class="time">2025</div>
+              <div class="muted full">End‑to‑end weekly publishing: keyword plan → draft → image → schedule/post → logging.</div>
+              <div class="meta full"><span class="btn">Click to view</span></div>
+            </div>
+          </a>
+          <a href="#" data-modal="#buildher-modal" class="no-decor">
+            <div class="proj-item work-item cursor">
+              <h3>BuildHer — Client Site</h3><div class="time">2025</div>
+              <div class="muted full">Custom site for a powerlifting coach: programs, results, onboarding, tracking, scheduling.</div>
+              <div class="meta full"><span class="btn">Click to view</span></div>
+            </div>
+          </a>
+          <a href="#" data-modal="#ksu-modal" class="no-decor">
+            <div class="proj-item work-item cursor">
+              <h3>KSU Club Barbell Official Site</h3><div class="time">2023</div>
+              <div class="muted full">Join the club, merch, mission/team, events.</div>
+              <div class="meta full"><span class="btn">Click to view</span></div>
+            </div>
+          </a>
         </div>
       </section>
     </section>
-
-    <!-- =========================
-         MAIN CONTENT GRID
-    ========================== -->
-    <section class="content-grid">
-      <!-- ===== LEFT COLUMN ===== -->
-      <aside class="col">
-        <!-- Contact Card -->
-        <section class="card left-col-card contact-card">
-          <h2>Contact</h2>
-          <div class="stack">
-            <div class="contact-box">+1 (470) 365-9019</div> <!-- Phone number -->
-            <div class="contact-box">carinne@example.com</div> <!-- Email -->
-            <div class="muted" style="text-align:center;">Currently Based in Atlanta, GA</div>
-          </div>
-        </section>
-
-        <!-- Certification Card -->
-        <section class="card left-col-card certification-card">
-          <h2>Certification</h2>
-          <div class="stack">
-            <!-- Make.com Certification -->
-            <div class="row">
-              <span class="pill">2025</span>
-              <div>
-                <strong>Make.com</strong>
-                <div class="k muted">Automation Engineering</div>
-              </div>
-            </div>
-            <!-- SheCodes Certification -->
-            <div class="row">
-              <span class="pill">2022</span>
-              <div>
-                <strong>SheCodes</strong>
-                <div class="k muted">Frontend Basics</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Hobby & Interest Card -->
-        <section class="card left-col-card hobby-card">
-          <h2>Hobby & Interest</h2>
-          <div class="grid-4 hobby-grid">
-            <!-- List of hobbies -->
-            <div class="contact-box hobby-chip" style="text-align:center;">Lift</div>
-            <div class="contact-box hobby-chip" style="text-align:center;">Snowboard</div>
-            <div class="contact-box hobby-chip" style="text-align:center;">Travel</div>
-            <div class="contact-box hobby-chip" style="text-align:center;">Guitar</div>
-          </div>
-          <h2 style="margin-top:1.5em;">Dislikes</h2>
-          <div class="grid-4 hobby-grid">
-            <!-- List of dislikes -->
-            <div class="contact-box hobby-chip" style="text-align:center;">Leg Day</div>
-            <div class="contact-box hobby-chip" style="text-align:center;">Olives</div>
-          </div>
-        </section>
-
-        <!-- References Card -->
-        <section class="card left-col-card reference-card">
-          <h2>References</h2>
-          <div class="grid-2" style="grid-template-columns:1fr;gap:12px;">
-            <!-- Reference 1 -->
-            <div class="contact-box ref-box">
-              <strong>Julian Trumper</strong><br />Rankey Founder
-              <div class="k">
-                <a href="mailto:nabeel@example.com"
-                  style="color:#b0b0b0; text-decoration:none;"
-                  onmousedown="this.style.color='#b0b0b0'"
-                  onmouseup="this.style.color='#b0b0b0'"
-                  onfocus="this.style.color='#b0b0b0'"
-                  onblur="this.style.color='#b0b0b0'">nabeel@example.com</a>
-              </div>
-            </div>
-            <!-- Reference 2 -->
-            <div class="contact-box ref-box">
-              <strong>Peter Thompkins</strong><br />Current Employer: Hospitality
-              <div class="k">
-                <a href="mailto:hhanzala@example.com"
-                  style="color:#b0b0b0; text-decoration:none;"
-                  onmousedown="this.style.color='#b0b0b0'"
-                  onmouseup="this.style.color='#b0b0b0'"
-                  onfocus="this.style.color='#b0b0b0'"
-                  onblur="this.style.color='#b0b0b0'">hhanzala@example.com</a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Social Links Card -->
-        <section class="card left-col-card social-card">
-          <h2>More of Me</h2>
-          <div class="social-grid">
-            <!-- Social buttons -->
-            <a class="btn" href="https://linkedin.com/in/carinne" target="_blank" rel="noopener">LinkedIn</a>
-            <a class="btn" href="https://github.com/carinne" target="_blank" rel="noopener">GitHub</a>
-            <a class="btn" href="https://twitter.com/carinne" target="_blank" rel="noopener">Twitter</a>
-            <a class="btn" href="https://instagram.com/carinne" target="_blank" rel="noopener">Instagram</a>
-          </div>
-        </section>
-      </aside>
-
-      <!-- ===== RIGHT COLUMN ===== -->
-      <section class="col right-col">
-        <!-- Work Experience Card -->
-        <section class="card work-experience-card">
-          <h2>Work Experience</h2>
-          <div class="stack">
-            <!-- Job 1: Rankey -->
-            <div class="work-item">
-              <h3>Automation Engineer — Rankey</h3>
-              <div class="time">May – Present</div>
-              <div class="muted" style="grid-column:1 / -1">
-                Developed an AI-powered automation tool that manages the entire content publishing workflow for multiple WordPress sites—including planning, writing, image generation, and posting. Implemented robust error handling with automatic retries, detailed logging, and customizable settings for each client.
-              </div>
-              <div style="grid-column:1 / -1;margin-top:8px;">
-                <!-- Skills for this job -->
-                <span class="skill-chip">Make</span>
-                <span class="skill-chip">API Integration</span>
-                <span class="skill-chip">JSON</span>
-                <span class="skill-chip">Workflow Design</span>
-                <span class="skill-chip">Automation Design</span>
-                <span class="skill-chip">Process Automation</span>
-                <span class="skill-chip">Prompt Engineering</span>
-                <span class="skill-chip">Technical Presentation</span>
-              </div>
-            </div>
-
-            <!-- Job 2: BuildHer -->
-            <div class="work-item">
-              <h3>Startup Founder — BuildHer</h3>
-              <div class="time">July – Present</div>
-              <div class="muted" style="grid-column:1 / -1">
-                Build and launch websites for strength sports coaches and teams, providing coaches a platform for client onboarding, training plan delivery, and case studies.
-              </div>
-              <div style="grid-column:1 / -1;margin-top:8px;">
-                <!-- Skills for this job -->
-                <span class="skill-chip">Sales</span>
-                <span class="skill-chip">Web Design</span>
-                <span class="skill-chip">HTML</span>
-                <span class="skill-chip">JavaScript</span>
-                <span class="skill-chip">CSS</span>
-                <span class="skill-chip">JSON</span>
-                <span class="skill-chip">GitHub</span>
-                <span class="skill-chip">Client Lifecycle Management</span>
-              </div>
-            </div>
-
-            <!-- Job 3: Poozle -->
-            <div class="work-item">
-              <h3>Frontend Intern — Poozle</h3>
-              <div class="time">June 2024 – Jan 2025</div>
-              <div class="muted" style="grid-column:1 / -1">
-                Built the sign-in page, interactive job cards, and integrated Google’s Location API for city auto-fill in Poozle’s onboarding flow.
-              </div>
-              <div style="grid-column:1 / -1;margin-top:8px;">
-                <!-- Skills for this job -->
-                <span class="skill-chip">React Native</span>
-                <span class="skill-chip">Expo</span>
-                <span class="skill-chip">HTML</span>
-                <span class="skill-chip">CSS</span>
-                <span class="skill-chip">JavaScript</span>
-                <span class="skill-chip">Node.js</span>
-                <span class="skill-chip">GitHub</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Projects Card -->
-        <section class="card projects-card">
-          <h2>Projects</h2>
-          <div class="stack">
-            <!-- Project 1: SEO Agent -->
-            <article class="proj-item">
-              <h3>SEO Content Agent</h3>
-              <div class="time">2025</div>
-              <div class="muted" style="grid-column:1 / -1">
-                End-to-end agent for weekly publishing across a WordPress network: keyword planning, draft generation, image creation, post & schedule, and logging.
-              </div>
-              <div class="meta" style="grid-column:1 / -1">
-                <!-- Button to open modal for this project -->
-                <a class="btn" href="#" data-modal="#seo-modal">Click to view</a>
-              </div>
-            </article>
-
-            <!-- Project 2: BuildHer Client Site -->
-            <article class="proj-item">
-              <h3>BuildHer - Client Site</h3>
-              <div class="time">2025</div>
-              <div class="muted" style="grid-column:1 / -1">
-                Custom website for a powerlifting coach with programs, results, onboarding, progress tracking, and interactive scheduling.
-              </div>
-              <div class="meta" style="grid-column:1 / -1">
-                <!-- Button to open modal for this project -->
-                <a class="btn" href="#" data-modal="#buildher-modal">Click to view</a>
-              </div>
-            </article>
-
-            <!-- Project 3: KSU Club Barbell Site -->
-            <article class="proj-item">
-              <h3>Kennesaw State University Club Barbell Official Site</h3>
-              <div class="time">2023</div>
-              <div class="muted" style="grid-column:1 / -1">
-                Website for Kennesaw State University Club Barbell: join the club, merch, mission & team, and events.
-              </div>
-              <div class="meta" style="grid-column:1 / -1">
-                <!-- Button to open modal for this project -->
-                <a class="btn" href="#" data-modal="#ksu-modal">Click to view</a>
-              </div>
-            </article>
-          </div>
-        </section>
-      </section>
-    </section>
-  </main>
-
-  <!-- =========================
-       MODALS FOR PROJECTS
-  ========================== -->
-
-  <!-- Modal for SEO Content Agent project -->
-  <div class="modal" id="seo-modal" aria-hidden="true">
-    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="SEO Content Agent">
-      <button class="modal__close" data-close>&times;</button>
-      <div class="modal__body">
-        <!-- Image/diagram for SEO Content Agent -->
-        <img src="Carinne (3).svg" alt="SEO Content Agent Diagram">
-      </div>
+  </section>
+</main>
+<!-- Modals: minimal markup, one per project -->
+<div class="modal" id="seo-modal" aria-hidden="true">
+  <div class="modal__panel" role="dialog" aria-modal="true" aria-label="SEO Content Agent">
+    <button class="modal__close" data-close>&times;</button>
+    <div class="modal__body"><img src="Carinne (3).svg" alt="SEO Content Agent Diagram"></div>
+  </div>
+</div>
+<div class="modal" id="buildher-modal" aria-hidden="true">
+  <div class="modal__panel" role="dialog" aria-modal="true" aria-label="BuildHer – Client Site">
+    <button class="modal__close" data-close>&times;</button>
+    <div class="modal__body">
+      <h2 style="margin:0 0 1rem">BuildHer - Client Site</h2>
+      <iframe src="https://tony-hinson.vercel.app/" style="width:100%;height:65vh;border:1px solid #ddd;border-radius:12px"></iframe>
+      <div style="display:flex;justify-content:center;margin-top:1rem"><a class="btn" href="https://tony-hinson.vercel.app/" target="_blank" rel="noopener">Visit Website</a></div>
     </div>
   </div>
-
-  <!-- Modal for BuildHer Client Site project -->
-  <div class="modal" id="buildher-modal" aria-hidden="true">
-    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="BuildHer – Client Site">
-      <button class="modal__close" data-close>&times;</button>
-      <div class="modal__body" style="padding:2rem;color:#222;">
-        <h2 style="margin:0 0 1rem 0;">BuildHer - Client Site</h2>
-        <!-- Embedded iframe of the project site -->
-        <iframe src="https://tony-hinson.vercel.app/"
-          style="width:100%;height:65vh;border:1px solid #ddd;border-radius:12px;"></iframe>
-        <div style="display:flex;justify-content:center;margin:1rem 0 0;">
-          <a class="btn" href="https://tony-hinson.vercel.app/" target="_blank" rel="noopener">Visit Website</a>
-        </div>
-      </div>
+</div>
+<div class="modal" id="ksu-modal" aria-hidden="true">
+  <div class="modal__panel" role="dialog" aria-modal="true" aria-label="KSU Club Barbell Website">
+    <button class="modal__close" data-close>&times;</button>
+    <div class="modal__body">
+      <h2 style="margin:0 0 1rem">KSU Club Barbell Official Site</h2>
+      <img src="ksubarb.png" alt="KSU Club Barbell Website Screenshot" style="display:block;max-width:100%;height:auto;width:100%;object-fit:contain"/>
+      <div style="display:flex;justify-content:center;margin-top:1rem"><a class="btn" href="https://kennesawclubbarbell.godaddysites.com/" target="_blank" rel="noopener">Visit Website</a></div>
     </div>
   </div>
-
-  <!-- Modal for KSU Club Barbell project -->
-  <div class="modal" id="ksu-modal" aria-hidden="true">
-    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="KSU Club Barbell Website">
-      <button class="modal__close" data-close>&times;</button>
-      <div class="modal__body" style="padding:2rem;color:#222;">
-        <h2 style="margin:0 0 1rem 0;">KSU Club Barbell Official Site</h2>
-        <!-- Embedded iframe of the project site -->
-        <iframe src="https://kennesawclubbarbell.godaddysites.com/"
-          style="width:100%;height:65vh;border:1px solid #ddd;border-radius:12px;"></iframe>
-        <div style="display:flex;justify-content:center;margin:1rem 0 0;">
-          <a class="btn" href="https://kennesawclubbarbell.godaddysites.com/" target="_blank" rel="noopener">Visit
-            Website</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================
-       FOOTER
-  ========================== -->
-  <footer style="text-align:center">Coded by Carinne Tzurdecker</footer>
-
-  <!-- =========================
-       MODAL CONTROLLER SCRIPT
-  ========================== -->
-  <script>
-    /* 
-      Reusable modal controller with fade/scale-in animation.
-      Handles opening/closing modals, accessibility, and keyboard support.
-    */
-    (function () {
-      // Open a modal (add .open, set aria-hidden, focus close button)
-      function openModal(modal) {
-        if (!modal) return;
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden', 'false');
-        // Focus the close button for accessibility
-        const btn = modal.querySelector('[data-close]');
-        if (btn) btn.focus();
-      }
-      // Close a modal (remove .open, set aria-hidden)
-      function closeModal(modal) {
-        if (!modal) return;
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
-      }
-
-      // Attach click handlers to all elements with [data-modal] (open modal)
-      document.querySelectorAll('[data-modal]').forEach(btn => {
-        btn.addEventListener('click', e => {
-          e.preventDefault();
-          const sel = btn.getAttribute('data-modal');
-          const modal = document.querySelector(sel);
-          openModal(modal);
-        });
-      });
-
-      // Attach close handlers to all modals
-      document.querySelectorAll('.modal').forEach(modal => {
-        // Close modal when clicking on the overlay (outside the panel)
-        modal.addEventListener('click', e => {
-          if (e.target === modal) closeModal(modal);
-        });
-        // Close modal when clicking the close button
-        modal.querySelectorAll('[data-close]').forEach(c => {
-          c.addEventListener('click', () => closeModal(modal));
-        });
-      });
-
-      // Close modal on Escape key
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-          document.querySelectorAll('.modal.open').forEach(closeModal);
-        }
-      });
-    })();
-  </script>
+</div>
+<footer style="text-align:center;margin:12px 0 40px;padding-bottom:24px">Coded by Carinne Tzurdecker</footer>
+<script>
+// Minimal modal logic, no duplication
+(()=>{const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+function openModal(m){if(m)m.classList.add('open'),m.setAttribute('aria-hidden','false')}
+function closeModal(m){if(m)m.classList.remove('open'),m.setAttribute('aria-hidden','true')}
+// Modal open/close events
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-modal]');
+  if(t){e.preventDefault();const m=$(t.getAttribute('data-modal')),c=t.closest('.proj-item.work-item'),r=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(c&&!r){c.classList.add('is-pickflip');setTimeout(()=>{openModal(m);c.classList.remove('is-pickflip')},2000)}
+    else openModal(m);return}
+  if(e.target.closest('[data-close]')){closeModal(e.target.closest('.modal'));return}
+  if(e.target.classList.contains('modal'))closeModal(e.target);
+});
+// Escape closes all modals
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$$('.modal.open').forEach(closeModal)});
+})();
+</script>
 </body>
-
 </html>
-
-
