@@ -202,6 +202,15 @@ body:has(.modal.open){overflow:hidden}
     margin:0;padding:.32rem .6rem;font-size:.86rem;text-align:center;white-space:nowrap
   }
 }
+/* Let vertical scrolling pass through interactive bits on touch */
+@media (pointer: coarse) {
+  a, button, .btn, .work-item, .proj-item, [data-modal] {
+    touch-action: pan-y;         /* allow vertical scroll gestures */
+    -ms-touch-action: pan-y;
+  }
+  /* optional: avoid accidental text selections while scrolling */
+  .work-item, .proj-item { -webkit-user-select: none; user-select: none; }
+}
 </style>
 </head>
 <body>
@@ -404,19 +413,56 @@ body:has(.modal.open){overflow:hidden}
 (()=>{const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 function openModal(m){if(m)m.classList.add('open'),m.setAttribute('aria-hidden','false')}
 function closeModal(m){if(m)m.classList.remove('open'),m.setAttribute('aria-hidden','true')}
-// Modal open/close events
-document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-modal]');
-  if(t){e.preventDefault();const m=$(t.getAttribute('data-modal')),c=t.closest('.proj-item.work-item'),r=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(c&&!r){c.classList.add('is-pickflip');setTimeout(()=>{openModal(m);c.classList.remove('is-pickflip')},2000)}
-    else openModal(m);return}
-  if(e.target.closest('[data-close]')){closeModal(e.target.closest('.modal'));return}
-  if(e.target.classList.contains('modal'))closeModal(e.target);
+// --- Tap detection so scrolls don't trigger clicks ---
+let touchInfo = { x: 0, y: 0, moved: false };
+const TAP_MOVE_TOLERANCE = 10; // px
+
+document.addEventListener('touchstart', (e) => {
+  const t = e.touches && e.touches[0];
+  if (!t) return;
+  touchInfo.x = t.clientX;
+  touchInfo.y = t.clientY;
+  touchInfo.moved = false;
+}, { passive: true });
+
+document.addEventListener('touchmove', (e) => {
+  const t = e.touches && e.touches[0];
+  if (!t) return;
+  if (Math.abs(t.clientX - touchInfo.x) > TAP_MOVE_TOLERANCE ||
+      Math.abs(t.clientY - touchInfo.y) > TAP_MOVE_TOLERANCE) {
+    touchInfo.moved = true; // treat as scroll/drag, not a tap
+  }
+}, { passive: true });
+
+document.addEventListener('touchend', () => {
+  // resets each gesture
+  setTimeout(() => (touchInfo.moved = false), 0);
+}, { passive: true });
+
+// Modal open/close events (tap-only)
+document.addEventListener('click', (e) => {
+  // if the finger moved, ignore this click (it was a scroll)
+  if (touchInfo.moved) return;
+
+  const t = e.target.closest('[data-modal]');
+  if (t) {
+    e.preventDefault();
+    const m = document.querySelector(t.getAttribute('data-modal'));
+    const c = t.closest('.proj-item.work-item');
+    const r = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (c && !r) {
+      c.classList.add('is-pickflip');
+      setTimeout(() => { openModal(m); c.classList.remove('is-pickflip'); }, 200);
+    } else {
+      openModal(m);
+    }
+    return;
+  }
+  if (e.target.closest('[data-close]')) { closeModal(e.target.closest('.modal')); return; }
+  if (e.target.classList.contains('modal')) closeModal(e.target);
 });
-// Escape closes all modals
-document.addEventListener('keydown',e=>{if(e.key==='Escape')$$('.modal.open').forEach(closeModal)});
-})();
 </script>
 </body>
 </html>
+
 
