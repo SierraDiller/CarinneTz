@@ -203,12 +203,17 @@ body:has(.modal.open){overflow:hidden}
   }
 }
 /* Let vertical scrolling pass through interactive bits on touch */
+/* Mobile: don't block vertical scroll just because an element is clickable */
 @media (pointer: coarse) {
-  a, button, .btn, .work-item, .proj-item, [data-modal] {
-    touch-action: pan-y;         /* allow vertical scroll gestures */
-    -ms-touch-action: pan-y;
+  html, body, main, .wrap { touch-action: pan-y; -ms-touch-action: pan-y; }
+
+  /* All interactive bits should still allow vertical panning */
+  a, button, .btn, [data-modal], .work-item, .proj-item {
+    touch-action: pan-y;  /* vertical swipes = scroll, not click */
+    -webkit-tap-highlight-color: transparent; /* less sticky tap highlight */
   }
-  /* optional: avoid accidental text selections while scrolling */
+
+  /* Prevent accidental text selection while dragging */
   .work-item, .proj-item { -webkit-user-select: none; user-select: none; }
 }
 </style>
@@ -409,60 +414,85 @@ body:has(.modal.open){overflow:hidden}
 </div>
 <footer style="text-align:center;margin:12px 0 40px;padding-bottom:24px">Coded by Carinne Tzurdecker</footer>
 <script>
-// Minimal modal logic, no duplication
-(()=>{const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
-function openModal(m){if(m)m.classList.add('open'),m.setAttribute('aria-hidden','false')}
-function closeModal(m){if(m)m.classList.remove('open'),m.setAttribute('aria-hidden','true')}
-// --- Tap detection so scrolls don't trigger clicks ---
-let touchInfo = { x: 0, y: 0, moved: false };
-const TAP_MOVE_TOLERANCE = 10; // px
+(() => {
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  function openModal(m){ if(m){ m.classList.add('open'); m.setAttribute('aria-hidden','false'); } }
+  function closeModal(m){ if(m){ m.classList.remove('open'); m.setAttribute('aria-hidden','true'); } }
 
-document.addEventListener('touchstart', (e) => {
-  const t = e.touches && e.touches[0];
-  if (!t) return;
-  touchInfo.x = t.clientX;
-  touchInfo.y = t.clientY;
-  touchInfo.moved = false;
-}, { passive: true });
+  // --- Tap vs Scroll gate ---
+  // If the finger moves >4px or lasts >400ms, treat it as scroll/drag, not a tap.
+  const TAP_MOVE_TOL = 4;     // px (tight so even small drags count as scroll)
+  const TAP_TIME_TOL = 400;   // ms
+  let gesture = {x:0,y:0,moved:false,start:0};
 
-document.addEventListener('touchmove', (e) => {
-  const t = e.touches && e.touches[0];
-  if (!t) return;
-  if (Math.abs(t.clientX - touchInfo.x) > TAP_MOVE_TOLERANCE ||
-      Math.abs(t.clientY - touchInfo.y) > TAP_MOVE_TOLERANCE) {
-    touchInfo.moved = true; // treat as scroll/drag, not a tap
-  }
-}, { passive: true });
+  document.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    gesture.x = t.clientX; gesture.y = t.clientY;
+    gesture.moved = false; gesture.start = Date.now();
+  }, { passive: true });
 
-document.addEventListener('touchend', () => {
-  // resets each gesture
-  setTimeout(() => (touchInfo.moved = false), 0);
-}, { passive: true });
-
-// Modal open/close events (tap-only)
-document.addEventListener('click', (e) => {
-  // if the finger moved, ignore this click (it was a scroll)
-  if (touchInfo.moved) return;
-
-  const t = e.target.closest('[data-modal]');
-  if (t) {
-    e.preventDefault();
-    const m = document.querySelector(t.getAttribute('data-modal'));
-    const c = t.closest('.proj-item.work-item');
-    const r = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (c && !r) {
-      c.classList.add('is-pickflip');
-      setTimeout(() => { openModal(m); c.classList.remove('is-pickflip'); }, 200);
-    } else {
-      openModal(m);
+  document.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    if (!t) return;
+    if (Math.abs(t.clientX - gesture.x) > TAP_MOVE_TOL ||
+        Math.abs(t.clientY - gesture.y) > TAP_MOVE_TOL) {
+      gesture.moved = true;
     }
-    return;
+  }, { passive: true });
+
+  // Prevent “ghost clicks” after a scroll on some Android WebViews
+  let suppressNextClick = false;
+  document.addEventListener('touchend', () => {
+    if (gesture.moved || (Date.now() - gesture.start) > TAP_TIME_TOL) {
+      suppressNextClick = true;
+      setTimeout(() => suppressNextClick = false, 350); // window where browsers may synthesize click
+    }
+  }, { passive: true });
+
+  // --- Click handler (tap-only) ---
+  document.addEventListener('click', (e) => {
+    if (gesture.moved || suppressNextClick) return;  // ignore clicks that were really scrolls
+
+    const trigger = e.target.closest('[data-modal]');
+    if (trigger) {
+      e.preventDefault();
+      const modal = document.querySelector(trigger.getAttribute('data-modal'));
+      const card  = trigger.closest('.proj-item.work-item');
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (card && !reduce) {
+        card.classList.add('is-pickflip');
+        setTimeout(() => { openModal(modal); card.classList.remove('is-pickflip'); }, 200);
+      } else {
+        openModal(modal);
+      }
+      return;
+    }
+
+    if (e.target.closest('[data-close]')) { closeModal(e.target.closest('.modal')); return; }
+    if (e.target.classList.contains('modal')) closeModal(e.target);
+  });
+
+  // Escape closes all modals
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') $$('.modal.open').forEach(closeModal);
+  });
+
+  // Keep scrolling smooth inside modals (already mostly set in your CSS)
+  function enableModalBodyScroll(){
+    $$('.modal__body').forEach(body => {
+      body.style.touchAction = 'pan-y';
+      body.style.webkitOverflowScrolling = 'touch';
+    });
   }
-  if (e.target.closest('[data-close]')) { closeModal(e.target.closest('.modal')); return; }
-  if (e.target.classList.contains('modal')) closeModal(e.target);
-});
+  document.addEventListener('DOMContentLoaded', enableModalBodyScroll);
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-modal]')) setTimeout(enableModalBodyScroll, 50);
+  });
+})();
 </script>
 </body>
 </html>
+
 
 
