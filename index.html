@@ -337,83 +337,34 @@ body:has(.modal.open){overflow:hidden}
 </div>
 <footer style="text-align:center;margin:12px 0 40px;padding-bottom:24px">Coded by Carinne Tzurdecker</footer>
 <script>
-(() => {
-  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  function openModal(m){ if(m){ m.classList.add('open'); m.setAttribute('aria-hidden','false'); } }
-  function closeModal(m){ if(m){ m.classList.remove('open'); m.setAttribute('aria-hidden','true'); } }
-
-  // --- Tap vs Scroll gate ---
-  // If the finger moves >4px or lasts >400ms, treat it as scroll/drag, not a tap.
-  const TAP_MOVE_TOL = 4;     // px (tight so even small drags count as scroll)
-  const TAP_TIME_TOL = 400;   // ms
-  let gesture = {x:0,y:0,moved:false,start:0};
-
-  document.addEventListener('touchstart', (e) => {
-    const t = e.touches[0];
-    gesture.x = t.clientX; gesture.y = t.clientY;
-    gesture.moved = false; gesture.start = Date.now();
-  }, { passive: true });
-
-  document.addEventListener('touchmove', (e) => {
-    const t = e.touches[0];
-    if (!t) return;
-    if (Math.abs(t.clientX - gesture.x) > TAP_MOVE_TOL ||
-        Math.abs(t.clientY - gesture.y) > TAP_MOVE_TOL) {
-      gesture.moved = true;
-    }
-  }, { passive: true });
-
-  // Prevent “ghost clicks” after a scroll on some Android WebViews
-  let suppressNextClick = false;
-  document.addEventListener('touchend', () => {
-    if (gesture.moved || (Date.now() - gesture.start) > TAP_TIME_TOL) {
-      suppressNextClick = true;
-      setTimeout(() => suppressNextClick = false, 350); // window where browsers may synthesize click
-    }
-  }, { passive: true });
-
-  // --- Click handler (tap-only) ---
-  document.addEventListener('click', (e) => {
-    if (gesture.moved || suppressNextClick) return;  // ignore clicks that were really scrolls
-
-    const trigger = e.target.closest('[data-modal]');
-    if (trigger) {
-      e.preventDefault();
-      const modal = document.querySelector(trigger.getAttribute('data-modal'));
-      const card  = trigger.closest('.proj-item.work-item');
-      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if (card && !reduce) {
-        card.classList.add('is-pickflip');
-        setTimeout(() => { openModal(modal); card.classList.remove('is-pickflip'); }, 200);
-      } else {
-        openModal(modal);
-      }
-      return;
-    }
-
-    if (e.target.closest('[data-close]')) { closeModal(e.target.closest('.modal')); return; }
-    if (e.target.classList.contains('modal')) closeModal(e.target);
-  });
-
-  // Escape closes all modals
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') $$('.modal.open').forEach(closeModal);
-  });
-
-  // Keep scrolling smooth inside modals (already mostly set in your CSS)
-  function enableModalBodyScroll(){
-    $$('.modal__body').forEach(body => {
-      body.style.touchAction = 'pan-y';
-      body.style.webkitOverflowScrolling = 'touch';
-    });
+(()=>{const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+function openModal(m){if(m){m.classList.add('open');m.setAttribute('aria-hidden','false');}}
+function closeModal(m){if(m){m.classList.remove('open');m.setAttribute('aria-hidden','true');}}
+// Tap vs Scroll gate
+const TAP_MOVE_TOL=4,TAP_TIME_TOL=400;let g={x:0,y:0,moved:false,start:0},suppress=false;
+document.addEventListener('touchstart',e=>{const t=e.touches[0];g.x=t.clientX;g.y=t.clientY;g.moved=false;g.start=Date.now();},{passive:true});
+document.addEventListener('touchmove',e=>{const t=e.touches[0];if(!t)return;if(Math.abs(t.clientX-g.x)>TAP_MOVE_TOL||Math.abs(t.clientY-g.y)>TAP_MOVE_TOL)g.moved=true;},{passive:true});
+document.addEventListener('touchend',()=>{if(g.moved||Date.now()-g.start>TAP_TIME_TOL){suppress=true;setTimeout(()=>suppress=false,350);}}, {passive:true});
+// Click handler (tap-only)
+document.addEventListener('click',e=>{if(g.moved||suppress)return;
+  const trigger=e.target.closest('[data-modal]'); if(trigger){e.preventDefault();
+    const modal=$(trigger.getAttribute('data-modal')); const card=trigger.closest('.proj-item.work-item');
+    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(card&&!reduce){card.classList.add('is-pickflip');setTimeout(()=>{openModal(modal);card.classList.remove('is-pickflip');},200);}
+    else openModal(modal); return;
   }
-  document.addEventListener('DOMContentLoaded', enableModalBodyScroll);
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-modal]')) setTimeout(enableModalBodyScroll, 50);
-  });
+  if(e.target.closest('[data-close]')){closeModal(e.target.closest('.modal'));return;}
+  if(e.target.classList.contains('modal')) closeModal(e.target);
+});
+// Esc closes
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$$('.modal.open').forEach(closeModal);});
+// Ensure modal bodies scroll nicely
+function enableModalBodyScroll(){$$('.modal__body').forEach(b=>{b.style.touchAction='pan-y';b.style.webkitOverflowScrolling='touch';});}
+document.addEventListener('DOMContentLoaded',enableModalBodyScroll);
+document.addEventListener('click',e=>{if(e.target.closest('[data-modal]'))setTimeout(enableModalBodyScroll,50);});
 })();
 </script>
 </body>
 </html>
+
 
