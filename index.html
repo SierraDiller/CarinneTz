@@ -4,17 +4,11 @@
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Carinne Tzurdecker — Automation Engineer</title>
 <style>
-/* --- CSS Variables & Resets --- */
-:root {
-  --bg:#FFF2E0;--card:#fff;--ink:#141417;--muted:#6b6b6b;--line:#ece6d6;--accent:#C0C9EE;--accent-ink:#0f1220;--radius:18px;--grid:#E7E1CF;
-  --sh-sm:0 1px 0 rgba(10,10,10,.04);--sh-md:0 8px 20px rgba(20,20,20,.06);--sh-lg:0 24px 48px rgba(20,20,20,.10)
-}
+:root{--bg:#FFF2E0;--card:#fff;--ink:#141417;--muted:#6b6b6b;--line:#ece6d6;--accent:#C0C9EE;--accent-ink:#0f1220;--radius:18px;--grid:#E7E1CF;--sh-sm:0 1px 0 rgba(10,10,10,.04);--sh-md:0 8px 20px rgba(20,20,20,.06);--sh-lg:0 24px 48px rgba(20,20,20,.10)}
 *,*:before,*:after{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;color:var(--ink);font:16px/1.55 "Inter",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  background:var(--bg);background-image:linear-gradient(to right,var(--grid)1px,transparent 1px),linear-gradient(to bottom,var(--grid)1px,transparent 1px);background-size:40px 40px}
-h1,h2,h3{margin:0 0 .5rem}
-h1{font-size:2rem;line-height:1.2} h2{text-transform:uppercase;letter-spacing:.02em;font-size:1.05rem}
+body{margin:0;color:var(--ink);font:16px/1.55 "Inter",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);background-image:linear-gradient(to right,var(--grid)1px,transparent 1px),linear-gradient(to bottom,var(--grid)1px,transparent 1px);background-size:40px 40px}
+h1,h2,h3{margin:0 0 .5rem} h1{font-size:2rem;line-height:1.2} h2{text-transform:uppercase;letter-spacing:.02em;font-size:1.05rem}
 .muted{color:var(--muted)} .muted-link{color:#b0b0b0;text-decoration:none}
 .wrap{max-width:1200px;margin:40px auto;padding:0 20px;display:grid;gap:28px}
 .top-grid,.content-grid{display:grid;gap:20px}
@@ -23,13 +17,11 @@ h1{font-size:2rem;line-height:1.2} h2{text-transform:uppercase;letter-spacing:.0
 .card:last-child{margin:0}
 .tag{display:inline-block;background:var(--accent);color:var(--accent-ink);padding:.35rem .7rem;border-radius:999px;font:700 .85rem/1 inherit}
 .skill-chip,.pill{display:inline-block;margin:6px 6px 0 0;padding:.35rem .6rem;border-radius:999px;border:1px solid var(--line)}
-.skill-chip{background:#f6f3e9;font-size:.9rem}
-.pill{background:#efe9d6;font-size:.85rem}
+.skill-chip{background:#f6f3e9;font-size:.9rem}.pill{background:#efe9d6;font-size:.85rem}
 .stack{display:flex;flex-direction:column;gap:18px}
-.row{display:flex;gap:12px;align-items:center}
-.row.name-card-row{justify-content:space-between;gap:32px}
-.bold-link {color: #141417; text-decoration: none; font-weight: normal;
-}.full{grid-column:1/-1}
+.row{display:flex;gap:12px;align-items:center}.row.name-card-row{justify-content:space-between;gap:32px}
+.bold-link{color:#141417;text-decoration:none;font-weight:400}
+.full{grid-column:1/-1}
 .ph.circle{height:120px;width:120px;border-radius:24px}
 .profile-image-circle{height:160px;width:160px;border-radius:50%;background:#e9e4d3;border:1px solid #d8d0b8;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .profile-image-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
@@ -37,11 +29,8 @@ h1{font-size:2rem;line-height:1.2} h2{text-transform:uppercase;letter-spacing:.0
 .work-item,.proj-item{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fffdfa;display:grid;grid-template-columns:1fr auto;gap:8px 12px;transition:transform .2s,box-shadow .2s}
 .work-item h3,.proj-item h3{margin:0;font-size:1rem}
 .time{font-size:.85rem;background:var(--accent);padding:.2rem .5rem;border-radius:8px;align-self:start;border:1px solid var(--accent)}
-/* Make project cards match work experience cards */
-.proj-item{background:#fffdfa;border:1px solid var(--line);}
-.grid-4,.grid-2{display:grid;gap:14px}
-.grid-4{grid-template-columns:repeat(4,1fr)}
-.grid-2{grid-template-columns:repeat(2,1fr)}
+.proj-item{background:#fffdfa;border:1px solid var(--line)}
+.grid-4,.grid-2{display:grid;gap:14px}.grid-4{grid-template-columns:repeat(4,1fr)}.grid-2{grid-template-columns:repeat(2,1fr)}
 .contact-box{padding:12px;border:1px solid var(--line);border-radius:12px;background:#fffdfa}
 .social-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:.65rem .95rem;border-radius:12px;border:1px solid var(--line);background:#fffdfa;color:var(--ink);font-weight:600;text-decoration:none;box-shadow:var(--sh-sm);transition:transform .2s,box-shadow .2s}
@@ -54,7 +43,8 @@ h1{font-size:2rem;line-height:1.2} h2{text-transform:uppercase;letter-spacing:.0
 a:hover .work-item{transform:translateY(-2px);box-shadow:var(--sh-md);cursor:pointer}
 .projects-card{perspective:1200px}
 .proj-item.work-item{transform-style:preserve-3d;transform-origin:center bottom}
-/* --- Modal Styles --- */
+
+/* Modal */
 .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(2px);z-index:9999;opacity:0;pointer-events:none;transition:opacity .25s}
 .modal.open{opacity:1;pointer-events:auto}
 .modal__panel{max-width:1080px;width:min(92vw,1080px);height:auto;max-height:90vh;background:#fff;border-radius:20px;box-shadow:0 24px 120px rgba(0,0,0,.55);overflow:hidden;transform:scale(.97) translateY(40px);opacity:0;transition:transform .25s cubic-bezier(.22,.61,.36,1),opacity .25s cubic-bezier(.22,.61,.36,1);pointer-events:none;display:flex;flex-direction:column}
@@ -66,64 +56,35 @@ a:hover .work-item{transform:translateY(-2px);box-shadow:var(--sh-md);cursor:poi
 .modal:not(#seo-modal) .modal__body{display:grid;align-content:start;gap:16px;padding:1.25rem 1.5rem;color:#222;box-sizing:border-box}
 .modal:not(#seo-modal) .modal__body .btn{justify-self:center;margin:4px 0 0}
 #seo-modal .modal__body{overflow-y:auto;max-height:100%}
+
+/* Mobile layout */
 @media (max-width:1024px){
   .wrap{display:flex;flex-direction:column;gap:15px}
   .top-grid,.content-grid,.col{display:contents}
   .card{width:100%;min-height:160px;margin:0}
-  .top-name-card{order:0}.top-profile{order:1}.top-skills{order:2}
-  .work-experience-card{order:3}.top-edu{order:5}.projects-card{order:4}
-  .certification-card{order:6}.contact-card{order:7}.reference-card{order:8}
-  .social-card{order:9}.hobby-card{order:10}
+  .top-name-card{order:0}.top-profile{order:1}.top-skills{order:2}.work-experience-card{order:3}.top-edu{order:5}.projects-card{order:4}.certification-card{order:6}.contact-card{order:7}.reference-card{order:8}.social-card{order:9}.hobby-card{order:10}
 }
-/* Desktop (min-width:1025px): Set left column card order: contact, certification, references, more of me, hobby */
+
+/* Desktop */
 @media (min-width:1025px){
   .content-grid{grid-template-columns:300px minmax(0,1.9fr);column-gap:20px}
   .top-grid{grid-template-columns:1fr 1.4fr 1.6fr;gap:8px 16px}
-  .top-grid>.card:not(.top-name-card),
-  .top-skills,
-  .top-edu,
-  .about-my-work-card {
-    min-height:260px;
-    display:flex;
-    flex-direction:column;
-    padding:24px 24px 16px 24px; /* Reduced bottom padding from 24px to 16px */
-    box-sizing:border-box;
-  }
+  .top-grid>.card:not(.top-name-card),.top-skills,.top-edu,.about-my-work-card{min-height:260px;display:flex;flex-direction:column;padding:24px 24px 16px;box-sizing:border-box}
   .top-skills>div{flex:1;display:flex;flex-wrap:wrap;align-items:flex-start;align-content:flex-start}
   .top-name-card{grid-column:1/4;border:1px solid #dfe4fb;box-shadow:0 12px 30px rgba(192,201,238,.35)}
   .left-col-card .grid-4{grid-template-columns:repeat(2,minmax(120px,1fr));gap:10px 12px}
   .left-col-card .grid-2{grid-template-columns:1fr;gap:12px}
   .left-col-card .contact-box{padding:10px 12px;overflow-wrap:anywhere}
-  /* Add gap between left column cards for desktop */
-  .content-grid > .col {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  /* Remove bottom margin from cards in left column to avoid double spacing */
-  .content-grid > .col > .card {
-    margin-bottom: 0;
-  }
-  /* Reduce gap below the top 3 cards */
-  .top-grid > .card.top-edu,
-  .top-grid > .card.top-profile,
-  .top-grid > .card.top-skills {
-    margin-bottom: 6px;
-  }
-  /* Desktop left column card order: contact, certification, references, more of me, hobby */
-  .content-grid > .col > .contact-card { order: 1; }
-  .content-grid > .col > .certification-card { order: 2; }
-  .content-grid > .col > .reference-card { order: 3; }
-  .content-grid > .col > .social-card { order: 4; }
-  .content-grid > .col > .hobby-card { order: 5; }
+  .content-grid>.col{display:flex;flex-direction:column;gap:12px}
+  .content-grid>.col>.card{margin-bottom:0}
+  .top-grid>.card.top-edu,.top-grid>.card.top-profile,.top-grid>.card.top-skills{margin-bottom:6px}
+  .content-grid>.col>.contact-card{order:1}.content-grid>.col>.certification-card{order:2}.content-grid>.col>.reference-card{order:3}.content-grid>.col>.social-card{order:4}.content-grid>.col>.hobby-card{order:5}
 }
-@media (max-width:700px){
-  .row.name-card-row{flex-direction:column;align-items:center;text-align:center;gap:12px}
-  .profile-image-circle{width:96px;height:96px;margin:0 auto;order:-1}
-}
+
+/* Small screens */
+@media (max-width:700px){.row.name-card-row{flex-direction:column;align-items:center;text-align:center;gap:12px}.profile-image-circle{width:96px;height:96px;margin:0 auto;order:-1}}
 @media (max-width:600px){
-  h1{font-size:clamp(1.5rem,5.5vw,2rem);line-height:1.15}
-  h2{font-size:clamp(.95rem,3.6vw,1.05rem)}
+  h1{font-size:clamp(1.5rem,5.5vw,2rem);line-height:1.15} h2{font-size:clamp(.95rem,3.6vw,1.05rem)}
   body{font-size:clamp(.95rem,3.7vw,1rem)}
   .wrap{margin:20px auto;padding:0 14px;gap:15px}
   .top-grid,.content-grid{gap:15px}
@@ -141,22 +102,14 @@ a:hover .work-item{transform:translateY(-2px);box-shadow:var(--sh-md);cursor:poi
   .modal__body iframe{height:70dvh}
   .modal__close{top:10px;right:10px;width:40px;height:40px;font-size:1.6rem}
 }
-@media (max-width:360px){
-  .grid-4{grid-template-columns:1fr}
-  .profile-image-circle{width:76px;height:76px}
-  .skill-chip,.pill{font-size:.78rem;padding:.28rem .5rem}
-}
-@media (prefers-reduced-motion:reduce){
-  .btn,.proj-item.work-item,.modal,.modal__panel{transition:none}
-  .proj-item.work-item.is-flipping{transform:none}
-}
+@media (max-width:360px){.grid-4{grid-template-columns:1fr}.profile-image-circle{width:76px;height:76px}.skill-chip,.pill{font-size:.78rem;padding:.28rem .5rem}}
+@media (prefers-reduced-motion:reduce){.btn,.proj-item.work-item,.modal,.modal__panel{transition:none}.proj-item.work-item.is-flipping{transform:none}}
+
+/* Lock page behind modal */
 body:has(.modal.open){overflow:hidden}
-.centered{text-align:center}
-.no-decor{color:inherit;text-decoration:none;display:block}
-.cursor{cursor:pointer}
-.svg-flag{vertical-align:middle;margin-right:6px}
-.k{font-size:.95em}
-/* --- Modal Scrollbar & Responsive --- */
+.centered{text-align:center}.no-decor{color:inherit;text-decoration:none;display:block}.cursor{cursor:pointer}.svg-flag{vertical-align:middle;margin-right:6px}.k{font-size:.95em}
+
+/* SEO modal scrollbars */
 #seo-modal .modal__panel{width:min(96vw,1280px);height:94vh}
 #seo-modal .modal__body{padding:0;overflow:auto}
 #seo-modal .modal__body :is(img,svg,iframe){display:block;width:100%;height:auto;max-height:none;border-radius:0}
@@ -165,22 +118,8 @@ body:has(.modal.open){overflow:hidden}
 #seo-modal .modal__body::-webkit-scrollbar-track{background:transparent}
 #seo-modal .modal__body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.18);border-radius:8px}
 #seo-modal .modal__body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.28)}
-@media (max-width:600px){
-  .modal__panel{width:92vw;height:auto;max-height:88vh;border-radius:16px}
-  .modal:not(#seo-modal) .modal__body{padding:1rem;gap:12px;align-items:center}
-  .modal__body h2{margin:0 0 .75rem;font-size:clamp(1rem,4.6vw,1.25rem);text-align:center}
-  .modal__body :is(img,iframe){width:100%;height:auto;max-height:50vh;border-radius:12px}
-  .modal:not(#seo-modal) .modal__body .btn{width:100%;margin:.75rem 0 0}
-  .modal__close{width:20px;height:20px;font-size:1.2rem;top:8px;right:8px}
-  #seo-modal .modal__panel{width:92vw;height:auto;max-height:88vh;border-radius:16px}
-  #seo-modal .modal__body{padding:0;overflow:auto;-webkit-overflow-scrolling:touch}
-  #seo-modal .modal__body :is(img,svg,iframe){width:100%;height:auto;max-height:none;border-radius:0}
-  #seo-modal .modal__body{scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.22) transparent}
-  #seo-modal .modal__body::-webkit-scrollbar{width:6px}
-  #seo-modal .modal__body::-webkit-scrollbar-track{background:transparent}
-  #seo-modal .modal__body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.22);border-radius:8px}
-}
-/* BuildHer modal: fixed width, vertical scroll only, minimal scrollbar */
+
+/* BuildHer modal */
 #buildher-modal .modal__panel{width:clamp(720px,92vw,1080px);height:min(92vh,1200px);display:flex;flex-direction:column}
 #buildher-modal .modal__body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;display:grid;grid-template-rows:auto 1fr auto;gap:12px;padding:12px 16px 8px;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.22) transparent;scrollbar-gutter:stable both-edges}
 #buildher-modal .modal__body::-webkit-scrollbar{width:8px}
@@ -189,32 +128,16 @@ body:has(.modal.open){overflow:hidden}
 #buildher-modal .modal__body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.28)}
 #buildher-modal .modal__body iframe{display:block;width:100%;height:75vh;min-height:480px;border-radius:0}
 #buildher-modal .modal__body>div[style*="justify-content:center"]{margin:6px 0 6px!important}
-@media (min-width:1025px){
-  .top-edu,.top-profile,.top-skills{
-    height:260px;display:flex;flex-direction:column;justify-content:flex-start;
-    padding:24px;box-sizing:border-box
-  }
-  .top-edu h2,.top-profile h2,.top-skills h2{margin:0 0 12px}
-  .top-skills>div{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-content:start
-  }
-  .top-skills .skill-chip{
-    margin:0;padding:.32rem .6rem;font-size:.86rem;text-align:center;white-space:nowrap
-  }
-}
-/* Let vertical scrolling pass through interactive bits on touch */
-/* Mobile: don't block vertical scroll just because an element is clickable */
-@media (pointer: coarse) {
-  html, body, main, .wrap { touch-action: pan-y; -ms-touch-action: pan-y; }
 
-  /* All interactive bits should still allow vertical panning */
-  a, button, .btn, [data-modal], .work-item, .proj-item {
-    touch-action: pan-y;  /* vertical swipes = scroll, not click */
-    -webkit-tap-highlight-color: transparent; /* less sticky tap highlight */
-  }
+/* Allow vertical panning on touch */
+@media (pointer:coarse){html,body,main,.wrap{touch-action:pan-y}a,button,.btn,[data-modal],.work-item,.proj-item{touch-action:pan-y;-webkit-tap-highlight-color:transparent}.work-item,.proj-item{-webkit-user-select:none;user-select:none}}
 
-  /* Prevent accidental text selection while dragging */
-  .work-item, .proj-item { -webkit-user-select: none; user-select: none; }
+/* 🔒 Kill ALL hover effects on touch devices */
+@media (hover:none), (pointer:coarse){
+  .btn:hover{transform:none;box-shadow:var(--sh-sm)}
+  a:hover .work-item, a:hover .proj-item{transform:none;box-shadow:var(--sh-sm)}
+  .modal__close:hover{background:#fff;border:1px solid rgb(238,232,232);color:#333}
+  .btn, .work-item, .proj-item, .modal__close{transition:none}
 }
 </style>
 </head>
@@ -493,3 +416,4 @@ body:has(.modal.open){overflow:hidden}
 </script>
 </body>
 </html>
+
