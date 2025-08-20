@@ -591,7 +591,7 @@
       }
     }
 
-    @media (min-width:600px) and (max-width:1024px) {
+    @media(max-width:1024px) {
       .top-row-3 {
         display: flex;
         flex-direction: column;
@@ -739,6 +739,7 @@
       }
     }
 
+    /* --- REWRITE: Replicate 600-1024px top-row-3 layout for max-600px --- */
     @media (max-width:600px) {
       h1 {
         font-size: clamp(1.5rem, 5.5vw, 2rem);
@@ -832,7 +833,36 @@
       .edu-line .time {
         margin-bottom: 4px;
       }
+
+      /* --- Replicate 600-1024px top-row-3 layout for max-600px --- */
+      .top-row-3 {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .top-edu,
+      .top-profile,
+      .top-skills {
+        width: 100%;
+        margin: 0;
+      }
+
+      .top-skills>div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: flex-start;
+        align-content: flex-start;
+      }
+
+      .top-skills .skill-chip {
+        margin: 0;
+        padding: .3rem .55rem;
+        font-size: .82rem;
+      }
     }
+    /* --- END REWRITE --- */
 
 
     .proj-item {
