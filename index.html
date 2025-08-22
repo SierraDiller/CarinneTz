@@ -17,6 +17,17 @@
       --btn-active: semi-transparent; --btn-active-ink: #0f1220;
     }
 
+    /* ===== PAGE FADE-IN ANIMATION ===== */
+    body.flow-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s cubic-bezier(.33,1,.68,1), transform 0.9s cubic-bezier(.33,1,.68,1);
+    }
+    body.flow-in.flow-in-ready {
+      opacity: 1;
+      transform: none;
+    }
+
     /* ===== RESET & BASE ===== */
     *, *:before, *:after { box-sizing: border-box; }
     html, body { height: 100%; }
@@ -259,7 +270,7 @@
     }
   </style>
 </head>
-<body>
+<body class="flow-in">
   <main class="wrap">
     <!-- Top Section: Name, Education, About, Skills -->
     <section class="top-grid">
@@ -498,6 +509,11 @@
   <script>
     // Add active color effect for .btn in work and projects sections
     document.addEventListener('DOMContentLoaded', function () {
+      // Fade-in page flow effect
+      setTimeout(function () {
+        document.body.classList.add('flow-in-ready');
+      }, 60);
+
       // For project buttons
       document.querySelectorAll('.projects-card .btn, .work-experience-card .btn').forEach(function (btn) {
         btn.addEventListener('mousedown', function (e) {
