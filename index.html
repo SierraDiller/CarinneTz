@@ -8,268 +8,744 @@
   <style>
     /* ===== CSS VARIABLES ===== */
     :root {
-      --bg: #FFF2E0; --card: #fff; --ink: #141417; --muted: #6b6b6b;
-      --line: #ece6d6; --accent: #C0C9EE; --accent-ink: #0f1220;
-      --radius: 18px; --grid: #E7E1CF;
-      --sh-sm: 0 1px 0 rgba(10,10,10,.04);
-      --sh-md: 0 8px 20px rgba(20,20,20,.06);
-      --sh-lg: 0 24px 48px rgba(20,20,20,.10);
-      --btn-active: semi-transparent; --btn-active-ink: #0f1220;
+      --bg: #FFF2E0;
+      --card: #fff;
+      --ink: #141417;
+      --muted: #6b6b6b;
+      --line: #ece6d6;
+      --accent: #C0C9EE;
+      --accent-ink: #0f1220;
+      --radius: 18px;
+      --grid: #E7E1CF;
+      --sh-sm: 0 1px 0 rgba(10, 10, 10, .04);
+      --sh-md: 0 8px 20px rgba(20, 20, 20, .06);
+      --sh-lg: 0 24px 48px rgba(20, 20, 20, .10);
+      --btn-active: semi-transparent;
+      --btn-active-ink: #0f1220;
     }
 
     /* ===== PAGE FADE-IN ANIMATION ===== */
     body.flow-in {
       opacity: 0;
       transform: translateY(30px);
-      transition: opacity 0.9s cubic-bezier(.33,1,.68,1), transform 0.9s cubic-bezier(.33,1,.68,1);
+      transition: opacity 0.9s cubic-bezier(.33, 1, .68, 1), transform 0.9s cubic-bezier(.33, 1, .68, 1);
     }
+
     body.flow-in.flow-in-ready {
       opacity: 1;
       transform: none;
     }
 
     /* ===== RESET & BASE ===== */
-    *, *:before, *:after { box-sizing: border-box; }
-    html, body { height: 100%; }
+    *,
+    *:before,
+    *:after {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
-      margin: 0; color: var(--ink);
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
       font: 16px/1.55 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       background-image: linear-gradient(to right, var(--grid) 1px, transparent 1px), linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
       background-size: 40px 40px;
     }
-    h1, h2, h3 { margin: 0 0 .5rem; }
-    h1 { font-size: 2rem; line-height: 1.2; }
-    h2 { text-transform: uppercase; letter-spacing: .02em; font-size: 1.05rem; }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0 0 .5rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+
+    h2 {
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      font-size: 1.05rem;
+    }
 
     /* ===== TYPOGRAPHY & LINKS ===== */
-    .muted, .school, .work-desc, .name-oneliner { color: var(--muted); }
-    .muted-link { color: #b0b0b0; text-decoration: none; }
-    .bold-link, .bold-link:visited { color: #141417 !important; text-decoration: none; font-weight: normal; }
-    .tag {
-      display: inline-block; background: var(--accent); color: var(--accent-ink);
-      padding: .35rem .7rem; border-radius: 999px; font: 700 .85rem/1 inherit;
-    }
+    .muted,
+    .school,
+    .work-desc,
     .name-oneliner {
-      margin-top: 1.1rem; font: 500 1.05rem/1.4 inherit; letter-spacing: .01em;
+      color: var(--muted);
     }
+
+    .muted-link {
+      color: #b0b0b0;
+      text-decoration: none;
+    }
+
+    .bold-link,
+    .bold-link:visited {
+      color: #141417 !important;
+      text-decoration: none;
+      font-weight: normal;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-ink);
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      font: 700 .85rem/1 inherit;
+    }
+
+    .name-oneliner {
+      margin-top: 1.1rem;
+      font: 500 1.05rem/1.4 inherit;
+      letter-spacing: .01em;
+    }
+
     .work-desc {
-      font-weight: 200; font-style: italic; font-size: 12px; margin: 0; line-height: 1.4;
+      font-weight: 200;
+      font-style: italic;
+      font-size: 12px;
+      margin: 0;
+      line-height: 1.4;
     }
+
     .school {
-      font-style: italic; font-size: 12px; margin-top: 8px; line-height: 1.4;
+      font-style: italic;
+      font-size: 12px;
+      margin-top: 8px;
+      line-height: 1.4;
     }
-    .degree { font-weight: 600; line-height: 1.4; }
+
+    .degree {
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
     .year {
-      background: #f3efdf; border: 1px solid var(--line); border-radius: 10px;
-      padding: .35rem .75rem; font-size: .85rem;
+      background: #f3efdf;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .35rem .75rem;
+      font-size: .85rem;
     }
 
     /* ===== LAYOUT: GRID & FLEX ===== */
     .wrap {
-      max-width: 1200px; margin: 40px auto; padding: 0 20px;
-      display: grid; gap: 28px;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: grid;
+      gap: 28px;
     }
-    .top-grid, .content-grid { display: grid; gap: 20px; }
-    .col { min-width: 0; }
-    .stack { display: flex; flex-direction: column; gap: 18px; }
-    .row { display: flex; gap: 12px; align-items: center; }
-    .row.name-card-row { justify-content: space-between; gap: 32px; }
-    .full { grid-column: 1/-1; }
+
+    .top-grid,
+    .content-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .col {
+      min-width: 0;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .row.name-card-row {
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .full {
+      grid-column: 1/-1;
+    }
 
     /* ===== UTILITIES ===== */
-    .grid-4, .grid-2 { display: grid; gap: 14px; }
-    .grid-4 { grid-template-columns: repeat(4, 1fr); }
-    .grid-2 { grid-template-columns: repeat(2, 1fr); }
-    .social-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+    .grid-4,
+    .grid-2 {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
 
     /* ===== COMPONENTS: CARDS & SECTIONS ===== */
-    .card, .skillcard {
-      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-      box-shadow: var(--sh-sm); margin-bottom: 0; gap: 10px; padding: 20px 22px 24px;
+    .card,
+    .skillcard {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--sh-sm);
+      margin-bottom: 0;
+      gap: 10px;
+      padding: 20px 22px 24px;
     }
-    .card:last-child { margin: 0; }
+
+    .card:last-child {
+      margin: 0;
+    }
+
     .contact-box {
-      padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #fffdfa;
-      text-align: center; display: flex; align-items: center; justify-content: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fffdfa;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .contact-box .hobby { background: transparent; }
-    .projects-card { perspective: 1200px; }
-    .proj-item, .work-item {
-      background: #fffdfa; border: 1px solid var(--line); border-radius: 14px; padding: 14px;
-      display: grid; grid-template-columns: 1fr auto; gap: 8px 12px;
+
+    .contact-box .hobby {
+      background: transparent;
+    }
+
+    .projects-card {
+      perspective: 1200px;
+    }
+
+    .proj-item,
+    .work-item {
+      background: #fffdfa;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 12px;
       transition: transform .2s, box-shadow .2s;
     }
-    .proj-item.work-item { transform-style: preserve-3d; transform-origin: center bottom; }
-    .work-item h3, .proj-item h3 { margin: 0; font-size: 1rem; }
+
+    .proj-item.work-item {
+      transform-style: preserve-3d;
+      transform-origin: center bottom;
+    }
+
+    .work-item h3,
+    .proj-item h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
     .time {
-      font-size: .85rem; background: var(--accent); padding: .2rem .5rem; border-radius: 8px;
-      align-self: start; border: 1px solid var(--accent);
+      font-size: .85rem;
+      background: var(--accent);
+      padding: .2rem .5rem;
+      border-radius: 8px;
+      align-self: start;
+      border: 1px solid var(--accent);
     }
-    .ph.circle { height: 120px; width: 120px; border-radius: 24px; }
+
+    .ph.circle {
+      height: 120px;
+      width: 120px;
+      border-radius: 24px;
+    }
+
     .profile-image-circle {
-      height: 160px; width: 160px; border-radius: 50%; background: #e9e4d3;
-      border: 1px solid #d8d0b8; overflow: hidden; display: flex; align-items: center; justify-content: center;
+      height: 160px;
+      width: 160px;
+      border-radius: 50%;
+      background: #e9e4d3;
+      border: 1px solid #d8d0b8;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+
     .profile-image-circle img {
-      width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
     }
+
     .bigdivider {
-      height: 1px; border-radius: 2px; margin: 10px 0 12px 0; background: #e8dcc7;
+      height: 1px;
+      border-radius: 2px;
+      margin: 10px 0 12px 0;
+      background: #e8dcc7;
     }
 
     /* ===== COMPONENTS: SKILLS & TAGS ===== */
-    .skill-chip, .pill {
-      display: inline-block; margin: 6px 6px 0 0; padding: .35rem .6rem;
-      border-radius: 999px; border: 1px solid var(--line);
+    .skill-chip,
+    .pill {
+      display: inline-block;
+      margin: 6px 6px 0 0;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
     }
-    .skill-chip { background: #f6f3e9; font-size: .9rem; }
-    .pill { background: #efe9d6; font-size: .85rem; }
+
+    .skill-chip {
+      background: #f6f3e9;
+      font-size: .9rem;
+    }
+
+    .pill {
+      background: #efe9d6;
+      font-size: .85rem;
+    }
 
     /* ===== COMPONENTS: EDUCATION & CERTIFICATION ===== */
-    .certification-card .row, .top-edu .edu-compact>div {
-      border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: transparent; margin: 0;
+    .certification-card .row,
+    .top-edu .edu-compact>div {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: transparent;
+      margin: 0;
     }
-    .top-edu .edu-compact, .top-edu .edu-line { gap: 6px; }
-    .top-edu .school { margin-top: 4px; }
-    .edu-compact { display: flex; flex-direction: column; gap: 8px; }
-    .edu-line { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+
+    .top-edu .edu-compact,
+    .top-edu .edu-line {
+      gap: 6px;
+    }
+
+    .top-edu .school {
+      margin-top: 4px;
+    }
+
+    .edu-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .edu-line {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
 
     /* ===== COMPONENTS: BUTTONS ===== */
-    .btn, .btn:visited, .btn:focus, .btn:active {
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: .65rem .95rem; border-radius: 12px; border: 1px solid var(--line);
-      background: #fffdfa; color: var(--ink); font-weight: 400;
-      text-decoration: none !important; box-shadow: var(--sh-sm);
+    .btn,
+    .btn:visited,
+    .btn:focus,
+    .btn:active {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .65rem .95rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fffdfa;
+      color: var(--ink);
+      font-weight: 400;
+      text-decoration: none !important;
+      box-shadow: var(--sh-sm);
       transition: transform .2s, box-shadow .2s, background .2s, color .2s;
-      cursor: pointer; user-select: none; outline: none;
+      cursor: pointer;
+      user-select: none;
+      outline: none;
     }
-    .btn:hover, .btn:active, .btn.active {
-      background: var(--btn-active); color: var(--btn-active-ink);
-      text-decoration: none; box-shadow: var(--sh-md);
+
+    .btn:hover,
+    .btn:active,
+    .btn.active {
+      background: var(--btn-active);
+      color: var(--btn-active-ink);
+      text-decoration: none;
+      box-shadow: var(--sh-md);
     }
+
     .btn:focus-visible {
-      outline: 2px solid var(--accent); outline-offset: 2px; text-decoration: none;
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      text-decoration: none;
     }
-    .btn .btn-label { text-decoration: none !important; }
-    .btn:link, .btn:visited { color: var(--ink) !important; }
+
+    .btn .btn-label {
+      text-decoration: none !important;
+    }
+
+    .btn:link,
+    .btn:visited {
+      color: var(--ink) !important;
+    }
 
     /* ===== LINK & HOVER EFFECTS ===== */
-    a.no-decor, a.no-decor:link, a.no-decor:visited, a.no-decor:hover, a.no-decor:active {
-      color: inherit; text-decoration: none;
+    a.no-decor,
+    a.no-decor:link,
+    a.no-decor:visited,
+    a.no-decor:hover,
+    a.no-decor:active {
+      color: inherit;
+      text-decoration: none;
     }
+
     a:hover .work-item {
-      transform: translateY(-2px); box-shadow: var(--sh-md); cursor: pointer;
+      transform: translateY(-2px);
+      box-shadow: var(--sh-md);
+      cursor: pointer;
     }
 
     /* ===== HOVER & INTERACTION ===== */
-    a, .btn { -webkit-tap-highlight-color: transparent; }
+    a,
+    .btn {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     @media (hover: none) {
-      .btn:hover, .btn:active, .btn.active {
-        background: #fffdfa; color: var(--ink); box-shadow: var(--sh-sm); text-decoration: none;
+
+      .btn:hover,
+      .btn:active,
+      .btn.active {
+        background: #fffdfa;
+        color: var(--ink);
+        box-shadow: var(--sh-sm);
+        text-decoration: none;
       }
-      a:hover .work-item { transform: none; box-shadow: var(--sh-sm); }
+
+      a:hover .work-item {
+        transform: none;
+        box-shadow: var(--sh-sm);
+      }
     }
 
     /* ======= RESPONSIVE ======= */
 
     /* --- Desktop & Tablet (min-width:1025px) --- */
     @media (min-width:1025px) {
-      .content-grid { grid-template-columns: 300px minmax(0,1.9fr); column-gap: 20px; }
-      .card { gap: 0; }
-      .top-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-      .top-name-card { order: 0; border: 1px solid #dfe4fb; box-shadow: 0 12px 30px rgba(192,201,238,.35); }
-      .top-row-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; order: 1; }
-      .top-edu { order: 0; } .top-profile { order: 1; } .top-skills { order: 2; }
-      .top-skills>div {
-        display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; align-content: flex-start;
+      .content-grid {
+        grid-template-columns: 300px minmax(0, 1.9fr);
+        column-gap: 20px;
       }
-      .top-skills .skill-chip { margin: 0; padding: .35rem .7rem; font-size: .9rem; }
-      .left-col-card .grid-4 { grid-template-columns: repeat(2,minmax(120px,1fr)); gap: 10px 12px; }
-      .left-col-card .grid-2 { grid-template-columns: 1fr; gap: 12px; }
-      .left-col-card .contact-box { padding: 10px 12px; overflow-wrap: anywhere; }
-      .content-grid>.col { display: flex; flex-direction: column; gap: 20px; }
-      .content-grid>.col>.card { margin-bottom: 0; }
-      .content-grid>.col>.contact-card { order: 1; }
-      .content-grid>.col>.certification-card { order: 2; }
-      .content-grid>.col>.reference-card { order: 3; }
-      .content-grid>.col>.social-card { order: 4; }
-      .content-grid>.col>.hobby-card { order: 5; }
-      .btn:hover { transform: translateY(-2px); box-shadow: var(--sh-md); }
-      .bigdivider { margin: 18px 0 20px 0; }
+
+      .card {
+        gap: 0;
+      }
+
+      .top-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .top-name-card {
+        order: 0;
+        border: 1px solid #dfe4fb;
+        box-shadow: 0 12px 30px rgba(192, 201, 238, .35);
+      }
+
+      .top-row-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        order: 1;
+      }
+
+      .top-edu {
+        order: 0;
+      }
+
+      .top-profile {
+        order: 1;
+      }
+
+      .top-skills {
+        order: 2;
+      }
+
+      .top-skills>div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: flex-start;
+        align-content: flex-start;
+      }
+
+      .top-skills .skill-chip {
+        margin: 0;
+        padding: .35rem .7rem;
+        font-size: .9rem;
+      }
+
+      .left-col-card .grid-4 {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+        gap: 10px 12px;
+      }
+
+      .left-col-card .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .left-col-card .contact-box {
+        padding: 10px 12px;
+        overflow-wrap: anywhere;
+      }
+
+      .content-grid>.col {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .content-grid>.col>.card {
+        margin-bottom: 0;
+      }
+
+      .content-grid>.col>.hobby-card { order: 1; }
+      .content-grid>.col>.contact-card { order: 2; }
+      .content-grid>.col>.certification-card { order: 3; }
+      .content-grid>.col>.reference-card { order: 4; }
+      .content-grid>.col>.social-card { order: 5; }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--sh-md);
+      }
+
+      .bigdivider {
+        margin: 18px 0 20px 0;
+      }
     }
 
     /* --- Tablet (min-width:600px) --- */
     @media (min-width:600px) {
-      .bigdivider { margin: 14px 0 16px 0; }
-      .time .right { justify-self: right; }
+      .bigdivider {
+        margin: 14px 0 16px 0;
+      }
+
+      .time .right {
+        justify-self: right;
+      }
     }
 
     /* --- Tablet (max-width:1024px) --- */
     @media (max-width:1024px) {
-      .wrap { display: flex; flex-direction: column; gap: 15px; }
-      .top-grid, .content-grid, .col { display: contents; }
-      .card { width: 100%; min-height: 160px; margin: 0; }
+      .wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .top-grid,
+      .content-grid,
+      .col {
+        display: contents;
+      }
+
+      .card {
+        width: 100%;
+        min-height: 160px;
+        margin: 0;
+      }
       .top-name-card { order: 0; }
       .top-profile { order: 1; }
       .top-skills { order: 2; }
-      .work-experience-card { order: 3; }
-      .projects-card { order: 4; }
-      .top-edu { order: 5; }
-      .certification-card { order: 6; }
-      .contact-card { order: 7; }
-      .reference-card { order: 8; }
-      .social-card { order: 9; }
-      .hobby-card { order: 10; }
-      .top-row-3 {
-        display: flex; flex-direction: column; gap: 15px;
+      .hobby-card { order: 3; }
+      .work-experience-card { order: 4; }
+      .projects-card { order: 5; }
+      .top-edu { order: 6; }
+      .certification-card { order: 7; }
+      .contact-card { order: 8; }
+      .reference-card { order: 9; }
+      .social-card { order: 10; }
+
+           .top-row-3 {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
       }
-      .top-edu, .top-profile, .top-skills { width: 100%; margin: 0; }
+
+      .top-edu,
+      .top-profile,
+      .top-skills {
+        width: 100%;
+        margin: 0;
+      }
+
       .top-skills>div {
-        display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; align-content: flex-start;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: flex-start;
+        align-content: flex-start;
       }
-      .top-skills .skill-chip { margin: 0; padding: .3rem .55rem; font-size: .82rem; }
+
+      .top-skills .skill-chip {
+        margin: 0;
+        padding: .3rem .55rem;
+        font-size: .82rem;
+      }
     }
 
     /* --- Mobile (max-width:700px) --- */
     @media (max-width:700px) {
       .row.name-card-row {
-        flex-direction: column; align-items: center; text-align: center; gap: 12px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 12px;
       }
-      .profile-image-circle { width: 96px; height: 96px; margin: 0 auto; order: -1; }
+
+      .profile-image-circle {
+        width: 96px;
+        height: 96px;
+        margin: 0 auto;
+        order: -1;
+      }
     }
 
     /* --- Mobile (max-width:600px) --- */
     @media (max-width:600px) {
-      h1 { font-size: clamp(1.5rem,5.5vw,2rem); line-height: 1.15; }
-      h2 { font-size: clamp(.95rem,3.6vw,1.05rem); }
-      body { font-size: clamp(.95rem,3.7vw,1rem); }
-      .wrap { margin: 20px auto; padding: 0 14px; gap: 15px; }
-      .top-grid, .content-grid { gap: 15px; }
-      .card { padding: 14px 16px; margin: 0; border-radius: 16px; }
-      .stack { gap: 12px; }
-      .ph.circle { display: none; }
-      .profile-image-circle { width: 88px; height: 88px; align-self: flex-end; }
-      .skill-chip, .pill {
-        font-size: .82rem; padding: .3rem .55rem; margin: 4px 6px 0 0;
+      h1 {
+        font-size: clamp(1.5rem, 5.5vw, 2rem);
+        line-height: 1.15;
       }
-      .grid-4 { grid-template-columns: repeat(2,1fr); gap: 10px; }
-      .grid-2, .social-grid { grid-template-columns: 1fr; gap: 10px; }
-      .btn { width: 100%; padding: .9rem 1rem; border-radius: 14px; }
-      .work-item, .proj-item { grid-template-columns: 1fr; gap: 8px; }
-      .work-item .time, .proj-item .time { justify-self: start; }
-      .school { font-size: 11px; margin-top: 6px; line-height: 1.3; }
-      .edu-line { gap: 6px; }
-      .edu-line .time { margin-bottom: 4px; }
-      .top-row-3 { display: flex; flex-direction: column; gap: 15px; }
-      .top-edu, .top-profile, .top-skills { width: 100%; margin: 0; }
+
+      h2 {
+        font-size: clamp(.95rem, 3.6vw, 1.05rem);
+      }
+
+      body {
+        font-size: clamp(.95rem, 3.7vw, 1rem);
+      }
+
+      .wrap {
+        margin: 20px auto;
+        padding: 0 14px;
+        gap: 15px;
+      }
+
+      .top-grid,
+      .content-grid {
+        gap: 15px;
+      }
+
+      .card {
+        padding: 14px 16px;
+        margin: 0;
+        border-radius: 16px;
+      }
+
+      .stack {
+        gap: 12px;
+      }
+
+      .ph.circle {
+        display: none;
+      }
+
+      .profile-image-circle {
+        width: 88px;
+        height: 88px;
+        align-self: flex-end;
+      }
+
+      .skill-chip,
+      .pill {
+        font-size: .82rem;
+        padding: .3rem .55rem;
+        margin: 4px 6px 0 0;
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .grid-2,
+      .social-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .btn {
+        width: 100%;
+        padding: .9rem 1rem;
+        border-radius: 14px;
+      }
+
+      .work-item,
+      .proj-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .work-item .time,
+      .proj-item .time {
+        justify-self: start;
+      }
+
+      .school {
+        font-size: 11px;
+        margin-top: 6px;
+        line-height: 1.3;
+      }
+
+      .edu-line {
+        gap: 6px;
+      }
+
+      .edu-line .time {
+        margin-bottom: 4px;
+      }
+
+      .top-row-3 {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .top-edu,
+      .top-profile,
+      .top-skills {
+        width: 100%;
+        margin: 0;
+      }
+
       .top-skills>div {
-        display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; align-content: flex-start;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: flex-start;
+        align-content: flex-start;
       }
-      .top-skills .skill-chip { margin: 0; padding: .3rem .55rem; font-size: .82rem; }
+
+      .top-skills .skill-chip {
+        margin: 0;
+        padding: .3rem .55rem;
+        font-size: .82rem;
+      }
     }
   </style>
 </head>
+
 <body class="flow-in">
   <main class="wrap">
     <!-- Top Section: Name, Education, About, Skills -->
@@ -281,7 +757,8 @@
             <div>
               <span class="tag">AI Automation Engineer</span>
               <h1 style="margin-top:.6rem">Hello, I’m<br>Carinne Tzurdecker</h1>
-              <div class="name-oneliner">Building automation that quietly powers teams—clean UX up front, durable ops in the back.</div>
+              <div class="name-oneliner">AI Automation-focused engineer building seamless systems that keep companies running
+              smoothly.</div>
             </div>
           </div>
           <div class="profile-image-circle">
@@ -296,9 +773,12 @@
           <div class="edu-compact">
             <div class="edu-line">
               <strong class="degree">B.S. Computer Science</strong>
-              <strong class="degree" style="font-size:0.9em;font-weight:400;font-style:italic;line-height:1.1;">Concentration in A.I.</strong>
+              <strong class="degree"
+                style="font-size:0.9em;font-weight:400;font-style:italic;line-height:1.1;">Concentration in
+                A.I.</strong>
               <div class="k muted" style="font-size:0.82em;font-style:italic;">Kennesaw State University</div>
-              <div class="k muted" style="font-size:0.75em;font-style:italic;line-height:0.5;margin-bottom:2px;">College of Computing & Software Engineering</div>
+              <div class="k muted" style="font-size:0.75em;font-style:italic;line-height:0.5;margin-bottom:2px;">College
+                of Computing & Software Engineering</div>
               <div class="time" style="margin:8px 0;">2022–2025</div>
             </div>
           </div>
@@ -306,16 +786,21 @@
         <section class="card top-profile">
           <h2>About My Work</h2>
           <div class="bigdivider"></div>
-          <p class="muted">AI Automation-focused engineer building seamless systems that keep companies running smoothly. Strong with Make, n8n, JSON workflows; driven by measurable results and hands-off ops.</p>
+          <p class="muted">Strong with Make, n8n, and JSON workflows; driven by measurable results and hands-off ops. Experienced in building
+          scalable automations that cut manual work and improve reliability. I enjoy tackling messy problems, breaking them into
+          clear steps, and creating solutions that free people to focus on the work that really matters</p>
         </section>
         <section class="skillcard top-skills">
           <h2>Skills</h2>
           <div class="bigdivider"></div>
           <div>
             <span class="skill-chip">HTML</span><span class="skill-chip">CSS</span><span class="skill-chip">JS</span>
-            <span class="skill-chip">React</span><span class="skill-chip">GitHub</span><span class="skill-chip">Python</span>
-            <span class="skill-chip">Java</span><span class="skill-chip">JSON</span><span class="skill-chip">API Integration</span>
-            <span class="skill-chip">Make / n8n</span><span class="skill-chip">Workflow Design</span><span class="skill-chip">Web Design</span>
+            <span class="skill-chip">React</span><span class="skill-chip">GitHub</span><span
+              class="skill-chip">Python</span>
+            <span class="skill-chip">Java</span><span class="skill-chip">JSON</span><span class="skill-chip">API
+              Integration</span>
+            <span class="skill-chip">Make / n8n</span><span class="skill-chip">Workflow Design</span><span
+              class="skill-chip">Web Design</span>
           </div>
         </section>
       </div>
@@ -328,21 +813,23 @@
           <h2>Contact</h2>
           <div class="bigdivider"></div>
           <div class="stack" style="gap:6px">
-            <a class="btn bold-link" href="tel:+14703659019" style="margin-bottom:6px;justify-content:flex-start;text-align:left;">
+            <a class="btn bold-link" href="tel:+14703659019"
+              style="margin-bottom:6px;justify-content:flex-start;text-align:left;">
               <span class="bold-link">Call: +1 (470) 365-9019</span>
             </a>
-            <a class="btn bold-link" href="mailto:ctzurdecker@outlook.com" style="justify-content:flex-start;text-align:left;">
+            <a class="btn bold-link" href="mailto:ctzurdecker@outlook.com"
+              style="justify-content:flex-start;text-align:left;">
               <span class="bold-link">Email: ctzurdecker@outlook.com</span>
             </a>
             <div style="height:1px"></div>
             <div class="muted" style="display:flex;align-items:center;justify-content:center;gap:10px;">
               <svg width="28" height="20" viewBox="0 0 28 20" class="svg-flag" xmlns="http://www.w3.org/2000/svg">
-                <rect x="1" y="8" width="6" height="11" fill="#B0B0B0" stroke="#888"/>
-                <rect x="8" y="4" width="6" height="15" fill="#D0D0D0" stroke="#888"/>
-                <rect x="15" y="11" width="5" height="8" fill="#B0B0B0" stroke="#888"/>
-                <rect x="21" y="6" width="6" height="13" fill="#C0C0C0" stroke="#888"/>
-                <rect x="10" y="13" width="2" height="3" fill="#888"/>
-                <rect x="23" y="14" width="2" height="3" fill="#888"/>
+                <rect x="1" y="8" width="6" height="11" fill="#B0B0B0" stroke="#888" />
+                <rect x="8" y="4" width="6" height="15" fill="#D0D0D0" stroke="#888" />
+                <rect x="15" y="11" width="5" height="8" fill="#B0B0B0" stroke="#888" />
+                <rect x="21" y="6" width="6" height="13" fill="#C0C0C0" stroke="#888" />
+                <rect x="10" y="13" width="2" height="3" fill="#888" />
+                <rect x="23" y="14" width="2" height="3" fill="#888" />
               </svg>
               <span>Currently Based in Atlanta, GA</span>
             </div>
@@ -355,11 +842,13 @@
           <div class="stack">
             <div class="row">
               <span class="time" style="margin-top:10px;display:inline-block;">2022</span>
-              <div>Make.com<div class="k muted">AI Automation Engineering</div></div>
+              <div>Make.com<div class="k muted">AI Automation Engineering</div>
+              </div>
             </div>
             <div class="row" style="align-items:flex-end;">
               <span class="time" style="margin-top:10px;display:inline-block;">2022</span>
-              <div>SheCodes<div class="k muted">Frontend Basics</div></div>
+              <div>SheCodes<div class="k muted">Frontend Basics</div>
+              </div>
             </div>
           </div>
         </section>
@@ -404,9 +893,11 @@
           <h2>More of Me</h2>
           <div class="bigdivider"></div>
           <div class="social-grid">
-            <a class="btn" href="https://www.linkedin.com/in/carinnetzurdecker" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="btn" href="https://www.linkedin.com/in/carinnetzurdecker" target="_blank"
+              rel="noopener">LinkedIn</a>
             <a class="btn" href="https://github.com/carinnetzur" target="_blank" rel="noopener">GitHub</a>
-            <a class="btn" href="https://www.facebook.com/carinne.tzurdecker.5/" target="_blank" rel="noopener">Facebook</a>
+            <a class="btn" href="https://www.facebook.com/carinne.tzurdecker.5/" target="_blank"
+              rel="noopener">Facebook</a>
             <a class="btn" href="https://www.instagram.com/carinneeeeee/" target="_blank" rel="noopener">Instagram</a>
           </div>
         </section>
@@ -421,21 +912,28 @@
               <div class="work-item cursor">
                 <h3>AI Automation Engineer — Rankey</h3>
                 <div class="time">April 2025 – Present</div>
-                <div class="muted full">Built an AI automation that plans, writes, images, posts, and logs weekly content across multiple WordPress sites with retries, logging, and per‑client configs.</div>
+                <div class="muted full">Built an AI automation that plans, writes, images, posts, and logs weekly
+                  content across multiple WordPress sites with retries, logging, and per‑client configs.</div>
                 <div class="full" style="margin-top:8px">
-                  <span class="skill-chip">Make</span><span class="skill-chip">API Integration</span><span class="skill-chip">JSON</span>
-                  <span class="skill-chip">Workflow Design</span><span class="skill-chip">Automation Design</span><span class="skill-chip">Process Automation</span>
-                  <span class="skill-chip">Prompt Engineering</span><span class="skill-chip">Technical Presentation</span>
+                  <span class="skill-chip">Make</span><span class="skill-chip">API Integration</span><span
+                    class="skill-chip">JSON</span>
+                  <span class="skill-chip">Workflow Design</span><span class="skill-chip">Automation Design</span><span
+                    class="skill-chip">Process Automation</span>
+                  <span class="skill-chip">Prompt Engineering</span><span class="skill-chip">Technical
+                    Presentation</span>
                 </div>
               </div>
             </a>
             <div class="work-item" style="background:transparent;">
               <h3>Startup Founder — BuildHer</h3>
               <div class="time">July 2025 – Present</div>
-              <div class="muted full">Websites for strength coaches/teams: onboarding, training plans, results, and scheduling.</div>
+              <div class="muted full">Websites for strength coaches/teams: onboarding, training plans, results, and
+                scheduling.</div>
               <div class="full" style="margin-top:8px">
-                <span class="skill-chip">Sales</span><span class="skill-chip">Web Design</span><span class="skill-chip">HTML</span>
-                <span class="skill-chip">JavaScript</span><span class="skill-chip">CSS</span><span class="skill-chip">JSON</span>
+                <span class="skill-chip">Sales</span><span class="skill-chip">Web Design</span><span
+                  class="skill-chip">HTML</span>
+                <span class="skill-chip">JavaScript</span><span class="skill-chip">CSS</span><span
+                  class="skill-chip">JSON</span>
                 <span class="skill-chip">GitHub</span><span class="skill-chip">Client Lifecycle</span>
               </div>
             </div>
@@ -443,10 +941,13 @@
               <div class="work-item cursor">
                 <h3>Poozle — Frontend Intern</h3>
                 <div class="time">Jun 2024 – Jan 2025</div>
-                <div class="muted full">Sign‑in page, interactive job cards, and Google Location API for onboarding.</div>
+                <div class="muted full">Sign‑in page, interactive job cards, and Google Location API for onboarding.
+                </div>
                 <div class="full" style="margin-top:8px">
-                  <span class="skill-chip">React Native</span><span class="skill-chip">Expo</span><span class="skill-chip">HTML</span>
-                  <span class="skill-chip">CSS</span><span class="skill-chip">JavaScript</span><span class="skill-chip">Node.js</span>
+                  <span class="skill-chip">React Native</span><span class="skill-chip">Expo</span><span
+                    class="skill-chip">HTML</span>
+                  <span class="skill-chip">CSS</span><span class="skill-chip">JavaScript</span><span
+                    class="skill-chip">Node.js</span>
                   <span class="skill-chip">GitHub</span>
                 </div>
               </div>
@@ -462,10 +963,13 @@
               <div class="proj-item work-item cursor">
                 <h3>SEO Content Agent</h3>
                 <div class="time">2025</div>
-                <div class="muted full">End‑to‑end weekly publishing: keyword plan → draft → image → schedule/post → logging.</div>
+                <div class="muted full">End‑to‑end weekly publishing: keyword plan → draft → image → schedule/post →
+                  logging.</div>
                 <div class="meta full"><span class="btn btn-label" id="seo-content-agent-btn">Click to view</span></div>
-                <div class="project-svg-container" style="display:none;justify-content:center;align-items:center;margin-top:16px;transition:opacity 0.5s;">
-                  <img src="Carinne (3).svg" alt="SEO Content Agent Demo" style="max-width:100%;height:auto;box-shadow:0 2px 16px #0001;border-radius:12px;opacity:0;transition:opacity 0.5s;">
+                <div class="project-svg-container"
+                  style="display:none;justify-content:center;align-items:center;margin-top:16px;transition:opacity 0.5s;">
+                  <img src="Carinne (3).svg" alt="SEO Content Agent Demo"
+                    style="max-width:100%;height:auto;box-shadow:0 2px 16px #0001;border-radius:12px;opacity:0;transition:opacity 0.5s;">
                 </div>
               </div>
             </a>
@@ -473,7 +977,8 @@
               <div class="proj-item work-item cursor">
                 <h3>BuildHer — Client Site</h3>
                 <div class="time">2025</div>
-                <div class="muted full">Custom site for a powerlifting coach: programs, results, onboarding, tracking, scheduling.</div>
+                <div class="muted full">Custom site for a powerlifting coach: programs, results, onboarding, tracking,
+                  scheduling.</div>
                 <div class="meta full"><span class="btn btn-label">Click to view</span></div>
               </div>
             </a>
@@ -482,14 +987,22 @@
                 <h3>UI/UX for Visually Impaired</h3>
                 <div class="time">2025</div>
                 <div class="muted full">
-                  Collaborative project improving accessibility for visually impaired users by enhancing UI element detection and labeling. Used the RICO mobile UI dataset with Faster R-CNN (ResNet backbone) to produce clearer bounding boxes and annotations.
+                  Collaborative project improving accessibility for visually impaired users by enhancing UI element
+                  detection and labeling. Used the RICO mobile UI dataset with Faster R-CNN (ResNet backbone) to produce
+                  clearer bounding boxes and annotations.
                 </div>
-                <div class="meta full"><span class="btn btn-label" id="uiux-visually-impaired-btn">Click to view</span></div>
-                <div class="project-pdf-container" style="display:none;justify-content:center;align-items:center;margin-top:16px;transition:opacity 0.5s;">
-                  <div style="width:100%;max-width:700px;display:flex;flex-direction:column;gap:18px;align-items:center;">
-                    <img src="1.svg" alt="UI/UX for Visually Impaired Paper Page 1" style="width:100%;border-radius:12px;box-shadow:0 2px 16px #0001;">
-                    <img src="2.svg" alt="UI/UX for Visually Impaired Paper Page 2" style="width:100%;border-radius:12px;box-shadow:0 2px 16px #0001;">
-                    <img src="3.svg" alt="UI/UX for Visually Impaired Paper Page 3" style="width:100%;border-radius:12px;box-shadow:0 2px 16px #0001;">
+                <div class="meta full"><span class="btn btn-label" id="uiux-visually-impaired-btn">Click to view</span>
+                </div>
+                <div class="project-pdf-container"
+                  style="display:none;justify-content:center;align-items:center;margin-top:16px;transition:opacity 0.5s;">
+                  <div
+                    style="width:100%;max-width:700px;display:flex;flex-direction:column;gap:18px;align-items:center;">
+                    <img src="1.svg" alt="UI/UX for Visually Impaired Paper Page 1"
+                      style="width:100%;border-radius:12px;box-shadow:0 2px 16px #0001;">
+                    <img src="2.svg" alt="UI/UX for Visually Impaired Paper Page 2"
+                      style="width:100%;border-radius:12px;box-shadow:0 2px 16px #0001;">
+                    <img src="3.svg" alt="UI/UX for Visually Impaired Paper Page 3"
+                      style="width:100%;border-radius:12px;box-shadow:0 2px 16px #0001;">
                   </div>
                 </div>
               </div>
@@ -543,74 +1056,72 @@
         el.style.textDecoration = 'none';
       });
     });
-              // Combined smooth show/hide for project SVG/PDF containers and toggle button text
-              (function () {
-                // Array of project configs: each with link id, container class, button id, and whether to fade all images
-                const projects = [
-                  {
-                    linkId: 'seo-content-agent-link',
-                    containerClass: '.project-svg-container',
-                    btnId: 'seo-content-agent-btn',
-                    fadeAllImgs: false
-                  },
-                  {
-                    linkId: 'uiux-visually-impaired-link',
-                    containerClass: '.project-pdf-container',
-                    btnId: 'uiux-visually-impaired-btn',
-                    fadeAllImgs: true
-                  }
-                ];
+    // Combined smooth show/hide for project SVG/PDF containers and toggle button text
+    (function () {
+      // Array of project configs: each with link id, container class, button id, and whether to fade all images
+      const projects = [
+        {
+          linkId: 'seo-content-agent-link',
+          containerClass: '.project-svg-container',
+          btnId: 'seo-content-agent-btn',
+          fadeAllImgs: false
+        },
+        {
+          linkId: 'uiux-visually-impaired-link',
+          containerClass: '.project-pdf-container',
+          btnId: 'uiux-visually-impaired-btn',
+          fadeAllImgs: true
+        }
+      ];
 
-                projects.forEach(function (proj) {
-                  const link = document.getElementById(proj.linkId);
-                  if (!link) return;
-                  const container = link.querySelector(proj.containerClass);
-                  const btn = document.getElementById(proj.btnId);
-                  let shown = false;
+      projects.forEach(function (proj) {
+        const link = document.getElementById(proj.linkId);
+        if (!link) return;
+        const container = link.querySelector(proj.containerClass);
+        const btn = document.getElementById(proj.btnId);
+        let shown = false;
 
-                  // For fadeAllImgs, set up all images; otherwise, just the first image
-                  let imgs;
-                  if (proj.fadeAllImgs) {
-                    imgs = container.querySelectorAll('img');
-                    imgs.forEach(img => {
-                      img.style.opacity = '0';
-                      img.style.transition = 'opacity 0.5s';
-                    });
-                  } else {
-                    imgs = [container.querySelector('img')];
-                    if (imgs[0]) {
-                      imgs[0].style.opacity = '0';
-                      imgs[0].style.transition = 'opacity 0.5s';
-                    }
-                  }
+        // For fadeAllImgs, set up all images; otherwise, just the first image
+        let imgs;
+        if (proj.fadeAllImgs) {
+          imgs = container.querySelectorAll('img');
+          imgs.forEach(img => {
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 0.5s';
+          });
+        } else {
+          imgs = [container.querySelector('img')];
+          if (imgs[0]) {
+            imgs[0].style.opacity = '0';
+            imgs[0].style.transition = 'opacity 0.5s';
+          }
+        }
 
-                  link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    if (!shown) {
-                      container.style.display = 'flex';
-                      setTimeout(() => {
-                        imgs.forEach(img => {
-                          img.style.opacity = '1';
-                        });
-                      }, 30);
-                      btn.textContent = 'Click to close';
-                      shown = true;
-                    } else {
-                      imgs.forEach(img => {
-                        img.style.opacity = '0';
-                      });
-                      setTimeout(() => {
-                        container.style.display = 'none';
-                      }, 500);
-                      btn.textContent = 'Click to view';
-                      shown = false;
-                    }
-                  });
-                });
-              })();
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          if (!shown) {
+            container.style.display = 'flex';
+            setTimeout(() => {
+              imgs.forEach(img => {
+                img.style.opacity = '1';
+              });
+            }, 30);
+            btn.textContent = 'Click to close';
+            shown = true;
+          } else {
+            imgs.forEach(img => {
+              img.style.opacity = '0';
+            });
+            setTimeout(() => {
+              container.style.display = 'none';
+            }, 500);
+            btn.textContent = 'Click to view';
+            shown = false;
+          }
+        });
+      });
+    })();
   </script>
 </body>
+
 </html>
-
-
-
